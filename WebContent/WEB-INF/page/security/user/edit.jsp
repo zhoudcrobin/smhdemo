@@ -5,18 +5,7 @@
 <html>
 	<head>
 		<title>文章分类属性</title>
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/default/easyui.css"/>' title="default">
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/gray/easyui.css"/>' title="gray">
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/black/easyui.css"/>' title="black">
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/bootstrap/easyui.css"/>' title="bootstrap">
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/metro/easyui.css"/>' title="metro">
-		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/icon.css"/>'>
-		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.min.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/easyui/skin/skin.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/css/pagebase.css"/>'></script>	
-		<script type="text/javascript" src='<c:url value="/comresource/js/ewcms.base.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/js/ewcms.func.js"/>'></script>        
+		<script type="text/javascript" src='<c:url value="/comresource/css/pagebase.css"/>'></script>
 	</head>
 	<body>
 		<f:form action="save.do" method="post" modelAttribute="user">
@@ -40,12 +29,8 @@
 					</td>
 				</tr>								
 			</table>
-			<c:if test="${empty selections}">
-				<input type="hidden" id="selections" name="selections" value=""/>
-			</c:if>
-			<c:forEach var="selection" items="${selections}">
-				<input type="hidden" id="selections" name="selections" value="${selection}"/>
-			</c:forEach>
+			<input type="hidden"  name="addrecordlist"/>
+			<input type="hidden" name="eventOP">
 		</f:form>
 	</body>
 </html>

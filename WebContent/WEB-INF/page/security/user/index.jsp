@@ -12,10 +12,8 @@
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/icon.css"/>'>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.min.js"/>'></script>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/easyui/skin/skin.js"/>'></script>
 		<script type="text/javascript" src='<c:url value="/comresource/css/pagebase.css"/>'></script>	
-		<script type="text/javascript" src='<c:url value="/comresource/js/ewcms.base.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/js/ewcms.func.js"/>'></script>	
+		<script type="text/javascript" src='<c:url value="/comresource/js/easyuicrud.js"/>'></script>	
 		<script type="text/javascript">
 		$(function(){
 			ewcmsBOBJ = new EwcmsBase();
@@ -46,24 +44,25 @@
 		function delCallBackSelf(){
 			ewcmsOOBJ.delOperateBack("accountName");
 		}
+		
 		</script>		
 	</head>
 	<body class="easyui-layout">
 		<div region="center" style="padding:2px;" border="false">
 	 		<table id="tt" fit="true"></table>	
 	 	</div>
-        <div id="edit-window" class="easyui-window" closed="true" icon="icon-winedit" title="&nbsp;文章分类属性" style="display:none;">
+        <div id="edit-window" class="easyui-window" closed="true" icon="icon-winedit" title="编辑-用户信息" style="display:none;">
             <div class="easyui-layout" fit="true">
                 <div region="center" border="false">
                    <iframe id="editifr"  name="editifr" class="editifr" frameborder="0" onload="iframeFitHeight(this);"  scrolling="no"></iframe>
                 </div>
                 <div region="south" border="false" style="text-align:center;height:28px;line-height:28px;background-color:#f6f6f6">
                     <a class="easyui-linkbutton" icon="icon-save" href="javascript:void(0)" onclick="saveOperator()">保存</a>
-                    <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="javascript:$('#edit-window').window('close');">取消</a>
+                    <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="closeWindow('#edit-window');">取消</a>
                 </div>
             </div>
         </div>	
-        <div id="query-window" class="easyui-window" closed="true" icon='icon-search' title="查询"  style="display:none;">
+        <div id="query-window" class="easyui-window" closed="true" icon='icon-search' title="查询-用户信息"  style="display:none;">
             <div class="easyui-layout" fit="true"  >
                 <div region="center" border="false" >
                 <f:form id="queryform" modelAttribute="user">
@@ -84,8 +83,8 @@
                	</f:form>
                 </div>
                 <div region="south" border="false" style="text-align:center;height:28px;line-height:28px;background-color:#f6f6f6">
-                    <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="querySearch('');">查询</a>
-                    <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="javascript:$('#query-window').window('close');">取消</a>
+                    <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" onclick="querySearch();">查询</a>
+                    <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="closeWindow('#query-window');">取消</a>
                 </div>
             </div>
         </div>      	

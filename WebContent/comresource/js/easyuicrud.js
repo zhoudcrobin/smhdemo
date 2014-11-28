@@ -1,91 +1,138 @@
-/**    
-  *作者 ：Fantasy  
-  *版本 ：V1.1     
-  */     
+var ewcmsBOBJ,ewcmsOOBJ;
+
+function iframeFitHeight(oIframe){
+     newHeight = oIframe.contentWindow.document.body.scrollHeight;
+     newWidth = oIframe.contentWindow.document.body.scrollWidth;
+     if(newHeight < 80)newHeight = 80;
+     if(newWidth < 150)newWidth = 150;
+     oIframe.width = newWidth+150;
+     oIframe.height = newHeight;
+}
+
+function openWindow(winID,options){
+	ewcmsBOBJ.openWindow(winID,options);
+}
+
+function closeWindow(winID){
+	ewcmsBOBJ.closeWindow(winID);
+}
+
+function querySearch(formID){
+	ewcmsOOBJ.querySearch(formID);
+}
+
+function queryAddRecordList(ids){
+	ewcmsOOBJ.queryNews(ids);
+}
+
+function queryReload(){
+	ewcmsOOBJ.queryReload();
+}
+
+function saveOperator(iframeID){
+	ewcmsOOBJ.saveOperator(iframeID);	
+}
+
+function addCallBack(){
+	ewcmsOOBJ.addOperateBack();
+}
+function updCallBack(){
+	ewcmsOOBJ.updOperateBack();
+}
+function delCallBack(){
+	ewcmsOOBJ.delOperateBack();
+}
+function queryCallBack(){
+	ewcmsOOBJ.queryOperateBack();
+}
+function reloadPageCallBack(){
+	self.location.reload();
+}
+   
 function HashMap(){
-     /* Map 大小 */     
-     var size = 0;      
-     /* 对象 */     
-     var entry = new Object();                 
-     /* 存 */     
-     this.put = function (key , value)      
-     {      
-         if(!this.containsKey(key))      
-         {      
-             size ++ ;      
-         }      
-         entry[key] = value;      
-     }      
-           
-     /* 取 */     
-     this.get = function (key)      
-     {      
-         return this.containsKey(key) ? entry[key] : null;      
-     }      
-           
-     /* 删除 */     
-     this.remove = function ( key )      
-     {      
-         if( this.containsKey(key) && ( delete entry[key] ) )      
-         {      
-             size --;      
-         }      
-     }      
-           
-     /* 是否包含 Key */     
-     this.containsKey = function ( key )      
-     {      
-         return (key in entry);      
-     }      
-           
-     /* 是否包含 Value */     
-     this.containsValue = function ( value )      
-     {      
-         for(var prop in entry)      
-         {      
-             if(entry[prop] == value)      
-             {      
-                 return true;      
-             }      
-         }      
-         return false;      
-     }      
-           
-     /* 所有 Value */     
-     this.values = function ()      
-     {      
-         var values = new Array();      
-         for(var prop in entry)      
-         {      
-             values.push(entry[prop]);      
-         }      
-         return values;      
-     }
-           
-     /* 所有 Key */     
-     this.keys = function ()      
-     {      
-         var keys = new Array();      
-         for(var prop in entry)      
-         {      
-             keys.push(prop);      
-         }      
-         return keys;      
-     }      
-           
-     /* Map Size */     
-     this.size = function ()      
-     {      
-         return size;      
-     }      
-           
-     /* 清空 */     
-     this.clear = function ()      
-     {      
-         size = 0;      
-         entry = new Object();      
-     }      
- } 
+    /* Map 大小 */     
+    var size = 0;      
+    /* 对象 */     
+    var entry = new Object();                 
+    /* 存 */     
+    this.put = function (key , value)      
+    {      
+        if(!this.containsKey(key))      
+        {      
+            size ++ ;      
+        }      
+        entry[key] = value;      
+    }      
+          
+    /* 取 */     
+    this.get = function (key)      
+    {      
+        return this.containsKey(key) ? entry[key] : null;      
+    }      
+          
+    /* 删除 */     
+    this.remove = function ( key )      
+    {      
+        if( this.containsKey(key) && ( delete entry[key] ) )      
+        {      
+            size --;      
+        }      
+    }      
+          
+    /* 是否包含 Key */     
+    this.containsKey = function ( key )      
+    {      
+        return (key in entry);      
+    }      
+          
+    /* 是否包含 Value */     
+    this.containsValue = function ( value )      
+    {      
+        for(var prop in entry)      
+        {      
+            if(entry[prop] == value)      
+            {      
+                return true;      
+            }      
+        }      
+        return false;      
+    }      
+          
+    /* 所有 Value */     
+    this.values = function ()      
+    {      
+        var values = new Array();      
+        for(var prop in entry)      
+        {      
+            values.push(entry[prop]);      
+        }      
+        return values;      
+    }
+          
+    /* 所有 Key */     
+    this.keys = function ()      
+    {      
+        var keys = new Array();      
+        for(var prop in entry)      
+        {      
+            keys.push(prop);      
+        }      
+        return keys;      
+    }      
+          
+    /* Map Size */     
+    this.size = function ()      
+    {      
+        return size;      
+    }      
+          
+    /* 清空 */     
+    this.clear = function ()      
+    {      
+        size = 0;      
+        entry = new Object();      
+    }      
+} 
 
 function isExistID(elementID){
 	if($(elementID).length == 0){
@@ -96,23 +143,23 @@ function isExistID(elementID){
 }
 
 /**
-  * ewcms基础对象
-  */
+ * ewcms基础对象
+ */
 function EwcmsBase(){
-    var toolMap = new HashMap();//工具拦HashMap对象
-    var frozenMap = new HashMap();//表格冻结字段HashMap对象
-    var queryURL,winWidth,winHeight,dgWidth,dgHeight;
-    winWidth = 500;
-    winHeight = 300;
-    dgWidth = 500;
-    dgHeight = 300;
+   var toolMap = new HashMap();//工具拦HashMap对象
+   var frozenMap = new HashMap();//表格冻结字段HashMap对象
+   var queryURL,winWidth,winHeight,dgWidth,dgHeight;
+   winWidth = 500;
+   winHeight = 300;
+   dgWidth = 500;
+   dgHeight = 300;
 	
-    frozenMap.put("ck", "{field:'ck',checkbox:true,width:50}");
-    toolMap.put("缺省查询", "{text:'',iconCls:'icon-reload',handler:'defQueryCallBack'}");
-    toolMap.put("查询", "{text:'查询',iconCls:'icon-search',handler:'queryCallBack'}");   
-    toolMap.put("新增", "{text:'新增',iconCls:'icon-add',handler:'addCallBack'}");
-    toolMap.put("修改", "{text:'修改',iconCls:'icon-edit',handler:'updCallBack'}");
-    toolMap.put("删除", "{text:'删除',iconCls:'icon-remove',handler:'delCallBack'}");
+   frozenMap.put("ck", "{field:'ck',checkbox:true,width:50}");
+   toolMap.put("缺省查询", "{text:'',iconCls:'icon-reload',handler:'reloadPageCallBack'}");
+   toolMap.put("查询", "{text:'查询',iconCls:'icon-search',handler:'queryCallBack'}");   
+   toolMap.put("新增", "{text:'新增',iconCls:'icon-add',handler:'addCallBack'}");
+   toolMap.put("修改", "{text:'修改',iconCls:'icon-edit',handler:'updCallBack'}");
+   toolMap.put("删除", "{text:'删除',iconCls:'icon-remove',handler:'delCallBack'}");
 
 	this.setWinWidth = function(width){
 		winWidth=width;
@@ -121,7 +168,7 @@ function EwcmsBase(){
 	this.setWinHeight = function(height){
 		winHeight=height;
 	}    
-    
+   
 	this.setDgWidth = function(width){
 		dgWidth=width;
 	}
@@ -145,7 +192,6 @@ function EwcmsBase(){
 		$(windowID).removeAttr("style");
 		if(typeof(options) == 'undefined')options = {};
 		$(windowID).window({
-		   title: (options.title ? options.title : '窗口'),
 		   width: (options.width ? options.width : winWidth),
 		   height: (options.height ? options.height : winHeight),
 		   left:(options.left ? options.left : ($(window).width() - (options.width ? options.width : winWidth))/2),
@@ -160,10 +206,10 @@ function EwcmsBase(){
 		if(options.iframeID){
 			$(options.iframeID).attr('src',options.url);
 		}else{
-            if(options.url){
-                $(windowID).find("iframe").attr('src',options.url);
-            }
-        }
+           if(options.url){
+               $(windowID).find("iframe").attr('src',options.url);
+           }
+       }
 		$(windowID).window('open');
 	}
 	
@@ -232,14 +278,14 @@ function EwcmsBase(){
 }
 
 /**
-  * ewcms操作对象
-  */
+ * ewcms操作对象
+ */
 function EwcmsOperate(){
 	var queryURL,inputURL,deleteURL,datagridID,editWinID,queryWinID;  
-    datagridID = '#tt';
-    editWinID = '#edit-window';
-    queryWinID = '#query-window';
-    
+   datagridID = '#tt';
+   editWinID = '#edit-window';
+   queryWinID = '#query-window';
+   
 	this.setQueryURL = function(url){
 		queryURL = url;
 	}
@@ -295,24 +341,20 @@ function EwcmsOperate(){
 	    $(queryWinID).window('close');
 	}
 	
-	/*刷新修改后的记录*/ 
-	this.queryReload = function(hide){
+	/*刷新记录*/ 
+	this.queryReload = function(){
 	    $(datagridID).datagrid('reload');
-	    if(hide){
-	        $(editWinID).window('close');
-	        $(datagridID).datagrid('clearSelections');
-	    }
 	}
 	            
 	/*查询指定的id号记录*/ 
-	this.queryNews = function(ids){
+	this.queryAdRecordList = function(ids){
 		if(!isExistVAR('queryURL','查询操作地址未指定'))return;
 		var url = queryURL;          	
 	    var index = url.indexOf("?");
 	    if (index == -1){
-	        url = url + "?parameters['selections']="+ids.join(",");
+	        url = url + "?parameters['selections']="+ids;
 	    }else{
-	        url = url + "&parameters['selections']="+ids.join(",");
+	        url = url + "&parameters['selections']="+ids;
 	    }
 
 	    if(!isExistID(datagridID))return;
@@ -390,7 +432,6 @@ function EwcmsOperate(){
 	    $.messager.confirm("提示","确定要删除所选记录吗?",function(r){
 	        if (r){
 	            $.post(deleteURL,ids,function(data){  
-	            	alert(data);
 	            	$.messager.alert('成功','删除成功','info');
 	            	$(datagridID).datagrid('clearSelections');
 	                $(datagridID).datagrid('reload');              	
@@ -403,16 +444,6 @@ function EwcmsOperate(){
 	this.queryOperateBack = function(){
 		if(!isExistID(queryWinID))return;
 	    openWindow(queryWinID);
-	}
-		    	
-	/*初始查询操作*/ 
-	this.initOperateQueryBack = function(){
-		if(!isExistID(datagridID))return;
-		if(!isExistVAR('queryURL','查询操作地址未指定'))return;
-	    $(datagridID).datagrid({
-	        pageNumber:1,
-	        url:queryURL
-	    });    	
 	}
 	
 	//根据参数查询URL对应值
