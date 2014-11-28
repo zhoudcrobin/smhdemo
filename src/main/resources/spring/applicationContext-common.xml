@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/cache 
+       http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+       
+    <!-- 扫描有注解的文件  base-package 包路径 -->
+	<context:component-scan base-package="com.smhdemo.common">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>        
+    <!-- Hibernate4 -->
+    <!-- 加载资源文件  其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
+    <context:property-placeholder location="classpath:spring.properties" />
+    <!-- 数据库映射 -->
+    
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.pass}" />      
+   	</bean> 
+   	   
+       <!-- JPA实体管理器工厂 -->
+    <bean id="jpaEntityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+        <property name="packagesToScan" value="com.smhdemo.common" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop><!-- validate/update/create -->
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+            </props>
+        </property>
+    </bean> 
+        
+    <!-- 用于设置JPA实现厂商的适配属性 -->
+    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="POSTGRESQL" />
+    </bean>
+   
+	<!-- 事务管理器 -->
+	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="jpaEntityManagerFactory" />
+	</bean>
+   	<!-- 声明式事务配置 -->
+    <tx:advice id="txAdvice" transaction-manager="jpaTransactionManager">
+        <tx:attributes>
+            <tx:method name="get*" propagation="NOT_SUPPORTED" read-only="true" />
+            <tx:method name="count*" propagation="NOT_SUPPORTED" read-only="true" />
+            <tx:method name="find*" propagation="NOT_SUPPORTED" read-only="true" />
+            <tx:method name="query*" propagation="NOT_SUPPORTED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+        </tx:attributes>
+    </tx:advice>
+     
+    <!-- 只对业务逻辑层实施事务  -->
+    <aop:config>
+        <aop:pointcut id="txPointcut" expression="execution(* com.smhdemo.common.*.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>   
+</beans>
