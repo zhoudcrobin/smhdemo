@@ -77,11 +77,11 @@
                 <div id="exit-menu" iconCls="icon-exit">退出</div>
              </div>
 		</div>
-		<div data-options="region:'west',split:true,title:'菜单'" style="width:180px;padding:1px;overflow:hidden;">
+		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:180px;padding:1px;overflow:hidden;">
 			<div  class="easyui-accordion"  fit=true border="false">
-               	<div title="报表管理" style="overflow:auto;">
+               	<div title="权限管理" style="overflow:auto;">
                	    <div class="nav-item">
-                         <a href="javascript:_home.addTab('系统用户','security/user/index.do')">
+                         <a href="javascript:_home.addTab('系统用户','common/security/user/index.do')">
                             <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
                             <span>系统用户</span>
                         </a>

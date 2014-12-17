@@ -12,12 +12,12 @@
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/icon.css"/>'>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.min.js"/>'></script>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/css/pagebase.css"/>'></script>	
-		<script type="text/javascript" src='<c:url value="/comresource/js/easyuicrud.js"/>'></script>	
+		<script type="text/javascript" src='<c:url value="/comresource/js/easyuicrud.js"/>'></script>
+		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>'>	
 		<script type="text/javascript">
 		$(function(){
 			ewcmsBOBJ = new EwcmsBase();
-			ewcmsBOBJ.setQueryURL('<c:url value="/security/user/query.do"/>');
+			ewcmsBOBJ.setQueryURL('<c:url value="/common/security/user/query.do"/>');
 			ewcmsBOBJ.delToolItem("修改");
 			ewcmsBOBJ.addToolItem("修改", "icon-edit","updCallBackSelf");
 			ewcmsBOBJ.delToolItem("删除");
@@ -34,8 +34,8 @@
 
 			ewcmsOOBJ = new EwcmsOperate();
 			ewcmsOOBJ.setQueryURL(ewcmsBOBJ.getQueryURL());
-			ewcmsOOBJ.setInputURL('<c:url value="/security/user/edit.do"/>');
-			ewcmsOOBJ.setDeleteURL('<c:url value="/security/user/delete.do"/>');
+			ewcmsOOBJ.setInputURL('<c:url value="/common/security/user/edit.do"/>');
+			ewcmsOOBJ.setDeleteURL('<c:url value="/common/security/user/delete.do"/>');
 			
 		});
 		function updCallBackSelf(){

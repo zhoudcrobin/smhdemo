@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.smhdemo.common.query.Order;
 import com.smhdemo.common.query.Result;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 
@@ -58,33 +59,40 @@ public class QueryFactory {
 							+ " = :"
 							+ parameters.get(i).getName() + " \n");
 				} else if (parameters.get(i).getType() == QueryOperateType.CharIn) {
-					sqlBuffer.append("InStr(model."
+					sqlBuffer.append("model."
 							+ parameters.get(i).getName()
-							+ " , :"
-							+ parameters.get(i).getName() + " ) > 0 \n");
+							+ " like '%'||:"
+							+ parameters.get(i).getName() + "||'%' \n");
 				}else if (parameters.get(i).getType() == QueryOperateType.In) {
 					sqlBuffer.append("model."
 							+ parameters.get(i).getName()
 							+ " in( :"
-							+ parameters.get(i).getName() + " ) > 0 \n");
+							+ parameters.get(i).getName() + " ) \n");
 				}
 			}
+
+		}
+		Order order =qc.getOrder();
+		if(order != null){
+			sqlBuffer.append(" order by " + order.getSort() + " "+order.getOrder());
 		}
 		
 		List<Object> list = new ArrayList<Object>();
 		int count=0;
 		try {
 			logger.info(sqlBuffer.toString());
-
+			Query queryObject1 = entityManager.createQuery(sqlBuffer.toString());
+			for (int i = 0; i < parameters.size(); i++) {
+				queryObject1.setParameter(parameters.get(i).getName(), parameters.get(i).getValue());
+			}
+			count = queryObject1.getResultList().size();
 			Query queryObject = entityManager.createQuery(sqlBuffer.toString());
 			for (int i = 0; i < parameters.size(); i++) {
-				queryObject.setParameter(parameters.get(i).getName(), 
-						parameters.get(i).getValue());
+				queryObject.setParameter(parameters.get(i).getName(), parameters.get(i).getValue());
 			}
 			queryObject.setFirstResult((qc.getPage()-1)*qc.getRows());
 			queryObject.setMaxResults(qc.getRows());
 			list = queryObject.getResultList();
-			count = 100;
 			entityManager.close();
 
 		} catch (RuntimeException re) {

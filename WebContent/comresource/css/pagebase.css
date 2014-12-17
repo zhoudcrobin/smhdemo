@@ -14,7 +14,7 @@ input.inputcheck{ margin: 1px 3px 0 0;float:left;}
 input.inputradio{ margin: 1px 3px 0 0;float:left;}
 select { color: #336699; border: 1px solid #667788; vertical-align: middle; margin: 0;}
 option { color: #336699; }
-textarea { color: #336699;float:left; border: 1px solid #667788; border-color: #667788 #AABBCC #AABBCC #778899; line-height: 19px; padding: 1px 1px 1px 4px; background: #F7FAFC; height: 80px; margin: 0; -moz-border-radius: 2px; -webkit-border-radius: 2px; overflow:auto; overflow-x: hidden;}
+textarea { color: #336699;float:left; border: 1px soliSd #667788; border-color: #667788 #AABBCC #AABBCC #778899; line-height: 19px; padding: 1px 1px 1px 4px; background: #F7FAFC; height: 80px; margin: 0; -moz-border-radius: 2px; -webkit-border-radius: 2px; overflow:auto; overflow-x: hidden;}
 textarea:hover { border-color: #00AAEE; }
 textarea:focus { border-color: #FF8800; }
 .inputbutton {margin: 0 0 0 3px;float:left;border: 1px solid #667788; border-color: #AABBCC #99AABB #667788 #99AABB; cursor: pointer; height:20px; vertical-align:middle; color:#147; padding-left: 2px; padding-right: 1px; }
@@ -22,9 +22,5 @@ textarea:focus { border-color: #FF8800; }
 /*form table*/
 .formtable{width:100%; border:1px solid #eeeeee;}
 .formtable td{border:1px solid #eeeeee;text-align:left;padding:1px 1px 1px 4px;height:24px;}
-/*
-.tdtitle{text-align: right; height:30px;white-space: nowrap; }
-.tdinput{text-align: left;white-space: nowrap; }
-*/
 table { border-collapse: collapse; }
 table.cellspacing { border-collapse: separate; }

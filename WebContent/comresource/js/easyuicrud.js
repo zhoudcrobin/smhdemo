@@ -22,7 +22,7 @@ function querySearch(formID){
 }
 
 function queryAddRecordList(ids){
-	ewcmsOOBJ.queryNews(ids);
+	ewcmsOOBJ.queryAddRecordList(ids);
 }
 
 function queryReload(){
@@ -347,7 +347,7 @@ function EwcmsOperate(){
 	}
 	            
 	/*查询指定的id号记录*/ 
-	this.queryAdRecordList = function(ids){
+	this.queryAddRecordList = function(ids){
 		if(!isExistVAR('queryURL','查询操作地址未指定'))return;
 		var url = queryURL;          	
 	    var index = url.indexOf("?");
