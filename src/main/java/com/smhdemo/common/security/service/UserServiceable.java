@@ -12,7 +12,7 @@ public interface UserServiceable {
      * @return 用户账号
      * @throws BaseException
      */	
-	String addUser(User user)throws BaseException;
+	Integer addUser(User user)throws BaseException;
 	
     /**
      * 修改用户
@@ -22,7 +22,7 @@ public interface UserServiceable {
      * @return 用户账号
      * @throws BaseException
      */	
-	String updUser(User user)throws BaseException;	
+	Integer updUser(User user)throws BaseException;	
 
     /**
      * 删除用户
@@ -32,7 +32,7 @@ public interface UserServiceable {
      * @return 用户账号
      * @throws BaseException
      */	
-	void delUser(String accountName)throws BaseException;	
+	void delUser(int pk)throws BaseException;	
 	
     /**
      * 查询用户
@@ -43,4 +43,14 @@ public interface UserServiceable {
      * @throws BaseException
      */	
 	User getUser(String accountName)throws BaseException;	
+	
+    /**
+     * 查询用户
+     * 
+     * @param pk 用户id
+     * 
+     * @return 用户对象
+     * @throws BaseException
+     */	
+	User getUser(int pk)throws BaseException;	
 }

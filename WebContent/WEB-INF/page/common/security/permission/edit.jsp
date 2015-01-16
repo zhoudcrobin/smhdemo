@@ -4,7 +4,7 @@
 
 <html>
 	<head>
-		<title>系统用户信息</title>
+		<title>权限信息编辑</title>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.min.js"/>'></script>
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/default/easyui.css"/>' title="default">
@@ -26,64 +26,31 @@
 		</script>
 	</head>
 	<body >
-		
-		<f:form action="save.do" method="post" commandName="user">
+		<f:form action="save.do" method="post" commandName="permission">
 			<table>
 				<tr>
-					<td>用户账号：</td>
+					<td>权限名称：</td>
 					<td>
-					<c:choose>
-					   <c:when test="${eventOP=='add'}">
-					   		<f:input path="accountName" class="inputtext"/><label style="color: red;">*</label>
-					   </c:when>  
-					   <c:otherwise>
-					   		<f:input path="accountName" readonly="true" class="inputdisabled"/><label style="color: red;">*</label>
-					   </c:otherwise> 
-					</c:choose>
-					</td>
-					<td>
-					<font color=red><f:errors path="accountName"/></font>
-					</td>
-				</tr>
-					<c:choose>
-					   <c:when test="${eventOP=='add'}">
-						   <tr>
-						   		<td>用户密码：</td>
-								<td>
-						   			<f:password path="password" class="inputtext"/>
-						   		</td>
-						   	</tr>	
-					   </c:when>  
-					   <c:otherwise>
-					   		<f:hidden path="password"/>
-					   </c:otherwise> 
-					</c:choose>
-				<tr>
-					<td>真实姓名：</td>
-					<td>
-						<f:input path="userInfo.realName" class="inputtext"/>
+						<f:input path="permissionName" class="inputtext"/>
 					</td>
 				</tr>
 				<tr>
-					<td>出生日期：</td>
+					<td>所属权限组：</td>
 					<td>
-						<f:input path="userInfo.birthday" class="inputtext"/>
+				        <f:select path="role.id">  
+	            			<f:option value="-1" label="--Please Select--"/>  
+	            			<f:options items="${roleList}" itemValue="id" itemLabel="roleName"/>  
+	        			</f:select> 
 					</td>
-				</tr>	
+				</tr>					
 				<tr>
-					<td>联系电话：</td>
+					<td>备注：</td>
 					<td>
-						<f:input path="userInfo.phone" class="inputtext"/>
-					</td>
-				</tr>
-				<tr>
-					<td>email邮件：</td>
-					<td>
-						<f:input path="userInfo.email" class="inputtext"/>
+						<f:input path="remark" class="inputtext"/>
 					</td>
 				</tr>															
 			</table>
-			<f:hidden path="userInfo.id"/>
+
 			<f:hidden path="id"/>
 			<input type="hidden" name="addrecordlist" value="${addrecordlist}"/>
 			<input type="hidden" name="eventOP" value="${eventOP}"/>

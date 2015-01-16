@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm"/>
+		<property name="cacheManager" ref="cacheManager"/>
+	</bean>
+	
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"/>
+		<property name="loginUrl" value="/login.do"/>
+		<property name="successUrl" value="/index.do"/>
+		<property name="unauthorizedUrl" value="/common/security/loginuser/403.do"/>
+		<property name="filterChainDefinitions">
+		<value>
+		<!--静态资源直接通过-->
+		/comresource/** =anon
+		<!--只有admin角色才能访问/user/save-->
+		/common/security/user/** =roles[adminmanager]
+		/common/security/role/** =roles[adminmanager]
+		/common/security/permission/** =roles[adminmanager]
+		<!--具有user:add权限的用户可以访问/user/save-->
+		<!--/user/save =perms[user:add]-->
+		<!--所有的请求都要通过验证-->
+		/** = authc
+		</value>
+		</property>
+	</bean>
+	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+</beans>

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,41 +27,43 @@ import com.smhdemo.common.query.jpa.QueryFactory;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 import com.smhdemo.common.security.SecurityFacable;
-import com.smhdemo.common.security.entity.User;
-import com.smhdemo.common.security.entity.UserInfo;
+import com.smhdemo.common.security.entity.Permission;
+import com.smhdemo.common.security.entity.Role;
 
 /**
- * 用户前端控制
  * 
+ *  
  * @author zhoudongchu
  */
 @Controller
-@RequestMapping(value = "/common/security/user")
-public class UserController {
+@RequestMapping(value = "/common/security/permission")
+public class PermissionController {
 	private static final Logger logger = LoggerFactory
-			.getLogger(UserController.class);
+			.getLogger(PermissionController.class);
 	@Autowired
 	private SecurityFacable securityFac;
 	@Autowired
 	private QueryFactory query;
 
 	@RequestMapping(value = "/index")
-	public String indexUser() {
-		return "common/security/user/index";
+	public String indexPermission() {
+		return "common/security/permission/index";
 	}
-
+	
 	@RequestMapping(value = "/edit")
-	public String editUser(
+	public String editPermission(
 			@RequestParam(value = "selections", required = false) String[] selections,
 			Model model) throws Exception {
 		if ((selections == null || selections.length == 0)) {
-			model.addAttribute("user", new User());
+			model.addAttribute("permission", new Permission());
 			model.addAttribute("eventOP", "add");
 		} else {
-			model.addAttribute("user", getUserVO(Integer.parseInt(selections[0])));
+			model.addAttribute("permission", getPermissionVO(Integer.parseInt(selections[0])));
 			model.addAttribute("eventOP", "upd");
 		}
-		return "common/security/user/edit";
+		List<Role> roleList = securityFac.getAllRole();
+		model.addAttribute("roleList", roleList);
+		return "common/security/permission/edit";
 	}
 
 	/**
@@ -76,21 +76,20 @@ public class UserController {
 	public String save(
 			@RequestParam(value = "addrecordlist") String addrecordlist,
 			@RequestParam(value = "eventOP") String eventOP,
-			@Valid @ModelAttribute User user, BindingResult result, Model model) {
+			@Valid @ModelAttribute Permission permission, BindingResult result, Model model) {
 		model.addAttribute("eventOP",eventOP);
 		model.addAttribute("addrecordlist", addrecordlist);
         if(result.hasErrors()){  
-            return "common/security/user/edit";
+            return "common/security/permission/edit";
         } 
 		try {
 			if (eventOP.equals("upd")) {
-				securityFac.updUser(user);
+				securityFac.updPermission(permission);
 			} else if (eventOP.equals("add")) {
-				if(securityFac.getUser(user.getAccountName())!=null){
-					result.rejectValue("accountName", "账号已存在","账号已存在");
-					return "common/security/user/edit";
+				if(permission.getRole().getId()==-1){
+					permission.setRole(null);
 				}
-				int id = securityFac.addUser(user);
+				int id = securityFac.addPermission(permission);
 				if (addrecordlist.length() == 0) {
 					model.addAttribute("addrecordlist", addrecordlist
 							+ id);
@@ -98,38 +97,38 @@ public class UserController {
 					model.addAttribute("addrecordlist", addrecordlist + ","
 							+ id);
 				}
-
 				model.addAttribute("eventOP", "add");
+				List<Role> roleList = securityFac.getAllRole();
+				model.addAttribute("roleList", roleList);
 			}
 		} catch (Exception e) {
 			logger.debug(e.toString());
 		}
-		model.addAttribute("user", new User());
-		return "common/security/user/edit";
+		model.addAttribute("permission", new Permission());
+		return "common/security/permission/edit";
 	}
 
 	@RequestMapping(value = "/delete")
 	@ResponseBody
-	public String delUser(
+	public void delRole(
 			@RequestParam(value = "selections", required = false) String[] selections,
 			Model model) throws Exception {
 		for (String pk : selections) {
-			securityFac.delUser(Integer.parseInt(pk));
+			securityFac.delPermission(Integer.parseInt(pk));
 		}
-		return "true";
 	}
 
-	protected User getUserVO(int pk) {
+	protected Permission getPermissionVO(int pk) {
 		try {
-			return securityFac.getUser(pk);
+			return securityFac.getPermission(pk);
 		} catch (Exception e) {
-			return new User();
+			return new Permission();
 		}
 	}
 
 	@RequestMapping(value = "/query")
 	@ResponseBody
-	public Object queryUser(@ModelAttribute DataGridModel model) {
+	public Object queryRole(@ModelAttribute DataGridModel model) {
 		Map<String, String> parameters = model.getParameters();
 		List<QueryParameter> qps = new ArrayList<QueryParameter>();
 		String selections = parameters.get("selections");
@@ -146,16 +145,16 @@ public class UserController {
 			qps.add(qp1);
 		}
 
-		String accountName = parameters.get("accountName");
-		if (accountName != null && accountName.length() > 0) {
-			QueryParameter qp2 = new QueryParameter("accountName", accountName,
+		String permissionName = parameters.get("permissionName");
+		if (permissionName != null && permissionName.length() > 0) {
+			QueryParameter qp2 = new QueryParameter("roleName", permissionName,
 					QueryOperateType.Equal);
 			qps.add(qp2);
 		}
 
-		String niceName = parameters.get("realName");
-		if (niceName != null && niceName.length() > 0) {
-			QueryParameter qp3 = new QueryParameter("userInfo.realName", niceName,
+		String remark = parameters.get("remark");
+		if (remark != null && remark.length() > 0) {
+			QueryParameter qp3 = new QueryParameter("remark", remark,
 					QueryOperateType.CharIn);
 			qps.add(qp3);
 		}
@@ -168,7 +167,7 @@ public class UserController {
 			order = new Order(model.getSort(), orderName);
 		}
 		return createDataGrid(query.queryByConditions(new QueryCondition(model
-				.getPage(), model.getRows(), order, User.class.getSimpleName(),
+				.getPage(), model.getRows(), order, Permission.class.getSimpleName(),
 				qps)));
 	}
 

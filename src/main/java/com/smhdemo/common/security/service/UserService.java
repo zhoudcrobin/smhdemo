@@ -17,24 +17,31 @@ public class UserService implements UserServiceable {
 	protected UserDaoable userDao;
 	
 	@Override
-	public String addUser(User user) throws BaseException {
+	public Integer addUser(User user) throws BaseException {
 		userDao.persist(user);
-		return user.getAccountName();
+		return user.getId();
 	}
 
 	@Override
-	public String updUser(User user) throws BaseException {
+	public Integer updUser(User user) throws BaseException {
 		userDao.merge(user);
-		return user.getAccountName();
+		return user.getId();
 	}
 
 	@Override
-	public void delUser(String accountName) throws BaseException {
-		userDao.removeByPK(accountName);
+	public void delUser(int pk) throws BaseException {
+		userDao.removeByPK(pk);
 	}
 
 	@Override
 	public User getUser(String accountName) throws BaseException {
-		return userDao.get(accountName);
+		return userDao.getUser(accountName);
 	}
+
+	@Override
+	public User getUser(int pk) throws BaseException {
+		return userDao.get(pk);
+	}
+	
+	
 }

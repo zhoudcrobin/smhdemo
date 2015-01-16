@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <html>
     <head>
         <title>smhdemo</title>
@@ -13,16 +14,19 @@
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/metro/easyui.css"/>' title="metro">
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/icon.css"/>'>
 		<script type="text/javascript" src='<c:url value="/comresource/js/home.js"/>'></script>
-		<script type="text/javascript" src='<c:url value="/comresource/css/pagebase.css"/>'></script>
+		<script type="text/javascript" src='<c:url value="/comresource/js/easyuicrud.js"/>'></script>
+		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>'>
         <script type="text/javascript">
             var _home = new home();
             $(function(){
             	var clock = new Clock();
             	clock.display(document.getElementById("clock"));
+                ewcmsBOBJ = new EwcmsBase();
+                ewcmsOOBJ = new EwcmsOperate();
                 _home.init({
-                    user:'<s:url action="user" namespace="/account"/>',
-                    password:'<s:url action="password" namespace="/account"/>',
-                    exit:'<s:url value="/logout.do"/>'
+                    user:'<c:url value="/common/security/loginuser/updinfo.do"/>',
+                    password:'<c:url value="/common/security/loginuser/updpassword.do"/>',
+                    exit:'<c:url value="/common/security/loginuser/logout.do"/>'
                 });
                 
             });
@@ -43,7 +47,7 @@
         			<td width="50%">
         				<table width="100%">
         					<tr>
-			        			<td height="30px" width="97%" style="text-align: right"><span style="font-size:13px;font-weight: bold;color:white;">标签1|标签2|标签3|<s:property value="realName"/> </span></td>
+			        			<td height="30px" width="97%" style="text-align: right"><span style="font-size:13px;font-weight: bold;color:white;">标签1|标签2|标签3|<shiro:principal/> </span></td>
         						<td width="2%"><a id="button-main" href="#" style="border:0;padding:0;"><img src="<c:url value='/comresource/image/exit.png'/>" width="17" height="17" style="border:0;"/></a></td>
         						<td width="1%"></td>
         					</tr>
@@ -71,22 +75,37 @@
         		</tr>
         	</table>
              <div id="mm" class="easyui-menu" style="width:120px;display:none;">
-                <div id="user-menu" iconCls="icon-edit">修改用户信息</div>
-                <div id="password-menu" iconCls="icon-password">修改密码</div>
+                <div id="user-menu" iconCls="icon-edit">用户信息修改</div>
+                <div id="password-menu">密码修改</div>
                 <div class="menu-sep"></div>
-                <div id="exit-menu" iconCls="icon-exit">退出</div>
+                <div id="exit-menu">退出</div>
              </div>
 		</div>
 		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:180px;padding:1px;overflow:hidden;">
 			<div  class="easyui-accordion"  fit=true border="false">
-               	<div title="权限管理" style="overflow:auto;">
-               	    <div class="nav-item">
-                         <a href="javascript:_home.addTab('系统用户','common/security/user/index.do')">
-                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
-                            <span>系统用户</span>
-                        </a>
-               	    </div>                  	
-               	</div>
+				<shiro:hasRole name="adminmanager">
+	               	<div title="权限管理" style="overflow:auto;">
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('系统用户','common/security/user/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>系统用户</span>
+	                        </a>
+	               	    </div>  
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('权限组','common/security/role/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>权限组</span>
+	                        </a>
+	               	    </div>
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('权限明细','common/security/permission/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>权限明细</span>
+	                        </a>
+	               	    </div>   	               	                        	
+	               	</div>
+               	</shiro:hasRole>
+	              	
         	</div>  
 		</div>        
       	<div data-options="region:'center'" style="overflow:hidden;">
@@ -96,5 +115,16 @@
                 </div>
             </div>      	
       	</div>
+        <div id="edit-window" class="easyui-window" closed="true" icon="icon-winedit" title="编辑窗口" style="display:none;">
+            <div class="easyui-layout" fit="true">
+                <div region="center" border="false">
+                   <iframe id="editifr"  name="editifr" class="editifr" frameborder="0" onload="iframeFitHeight(this);"  scrolling="no"></iframe>
+                </div>
+                <div region="south" border="false" style="text-align:center;height:28px;line-height:28px;background-color:#f6f6f6">
+                    <a class="easyui-linkbutton" icon="icon-save" href="javascript:void(0)" onclick="saveOperator()">保存</a>
+                    <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" onclick="closeWindow('#edit-window');">取消</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

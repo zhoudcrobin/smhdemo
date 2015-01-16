@@ -3,7 +3,7 @@
 		switchStylestyle(this.getAttribute("rel"));
 		return false;
 	});
-	var c = readCookie('style');
+	var c = readCookie('smhdemostyle');
 	if (c) switchStylestyle(c);
 });
 
@@ -31,7 +31,7 @@ function switchStylestyle(styleName){
 		this.disabled = true;
 		if (this.getAttribute('title') == styleName) this.disabled = false;
 	});	
-	createCookie('style', styleName, 365);
+	createCookie('smhdemostyle', styleName, 365);
 }
 //cookie
 function createCookie(name,value,days){

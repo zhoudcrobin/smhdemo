@@ -23,7 +23,7 @@ import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 @Service
 public class QueryFactory {
 	private static final Logger logger = LoggerFactory.getLogger(QueryFactory.class);
-	private String errorCode;
+
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -35,9 +35,6 @@ public class QueryFactory {
 		this.entityManager = entityManager;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
-	}
 
 	public Result queryByConditions(QueryCondition qc) {
 		StringBuffer sqlBuffer = new StringBuffer();
@@ -57,17 +54,17 @@ public class QueryFactory {
 					sqlBuffer.append("model."
 							+ parameters.get(i).getName()
 							+ " = :"
-							+ parameters.get(i).getName() + " \n");
+							+ parameters.get(i).getName().replace(".", "") + " \n");
 				} else if (parameters.get(i).getType() == QueryOperateType.CharIn) {
 					sqlBuffer.append("model."
 							+ parameters.get(i).getName()
 							+ " like '%'||:"
-							+ parameters.get(i).getName() + "||'%' \n");
+							+ parameters.get(i).getName().replace(".", "") + "||'%' \n");
 				}else if (parameters.get(i).getType() == QueryOperateType.In) {
 					sqlBuffer.append("model."
 							+ parameters.get(i).getName()
 							+ " in( :"
-							+ parameters.get(i).getName() + " ) \n");
+							+ parameters.get(i).getName().replace(".", "") + " ) \n");
 				}
 			}
 
@@ -83,12 +80,12 @@ public class QueryFactory {
 			logger.info(sqlBuffer.toString());
 			Query queryObject1 = entityManager.createQuery(sqlBuffer.toString());
 			for (int i = 0; i < parameters.size(); i++) {
-				queryObject1.setParameter(parameters.get(i).getName(), parameters.get(i).getValue());
+				queryObject1.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue());
 			}
 			count = queryObject1.getResultList().size();
 			Query queryObject = entityManager.createQuery(sqlBuffer.toString());
 			for (int i = 0; i < parameters.size(); i++) {
-				queryObject.setParameter(parameters.get(i).getName(), parameters.get(i).getValue());
+				queryObject.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue());
 			}
 			queryObject.setFirstResult((qc.getPage()-1)*qc.getRows());
 			queryObject.setMaxResults(qc.getRows());
@@ -96,7 +93,6 @@ public class QueryFactory {
 			entityManager.close();
 
 		} catch (RuntimeException re) {
-			errorCode += "CM000006";
 			throw re;
 		}
 		
