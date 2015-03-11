@@ -14,7 +14,7 @@
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
 		<script type="text/javascript" src='<c:url value="/comresource/js/easyuicrud.js"/>'></script>
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>'>	
-		<script type="text/javascript" src="http://www.jeasyui.com/easyui/datagrid-detailview.js"></script>		
+		<script type="text/javascript" src='<c:url value="/comresource/easyui/datagrid.detailview.js"/>'></script>		
 		<script type="text/javascript">
 		$(function(){
 			ewcmsBOBJ = new EwcmsBase();

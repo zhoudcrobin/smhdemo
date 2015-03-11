@@ -37,7 +37,8 @@ public class UserInfo implements Serializable {
 	@GeneratedValue(generator = "seq_shiro_userinfo", strategy = GenerationType.SEQUENCE)
     private Integer id;
 	
-	@JSONField (format="yyyy-MM-dd")   
+	@JSONField (format="yyyy-MM-dd") 
+	@DateTimeFormat(pattern="yyyy-MM-dd") 
     @Temporal(TemporalType.DATE)
     private Date birthday;	
     

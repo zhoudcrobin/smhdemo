@@ -9,7 +9,11 @@ import java.util.List;
  * @author zhoudongchu
  */
 public class RoleSelect implements Serializable {
-    private List<String> roles;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<String> roles;
 
 	public List<String> getRoles() {
 		return roles;
