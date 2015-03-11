@@ -26,7 +26,7 @@ import com.smhdemo.common.query.jpa.QueryCondition;
 import com.smhdemo.common.query.jpa.QueryFactory;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
-import com.smhdemo.common.security.SecurityFacable;
+import com.smhdemo.common.security.SecurityFac;
 import com.smhdemo.common.security.entity.Permission;
 import com.smhdemo.common.security.entity.Role;
 
@@ -41,7 +41,7 @@ public class PermissionController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PermissionController.class);
 	@Autowired
-	private SecurityFacable securityFac;
+	private SecurityFac securityFac;
 	@Autowired
 	private QueryFactory query;
 
@@ -128,7 +128,7 @@ public class PermissionController {
 
 	@RequestMapping(value = "/query")
 	@ResponseBody
-	public Object queryRole(@ModelAttribute DataGridModel model) {
+	public Object queryPermission(@ModelAttribute DataGridModel model) {
 		Map<String, String> parameters = model.getParameters();
 		List<QueryParameter> qps = new ArrayList<QueryParameter>();
 		String selections = parameters.get("selections");
@@ -147,7 +147,7 @@ public class PermissionController {
 
 		String permissionName = parameters.get("permissionName");
 		if (permissionName != null && permissionName.length() > 0) {
-			QueryParameter qp2 = new QueryParameter("roleName", permissionName,
+			QueryParameter qp2 = new QueryParameter("permissionName", permissionName,
 					QueryOperateType.Equal);
 			qps.add(qp2);
 		}

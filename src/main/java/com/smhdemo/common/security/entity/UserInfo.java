@@ -14,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.alibaba.fastjson.annotation.JSONField;
 /**
  * 
  * <ul>
@@ -35,7 +37,7 @@ public class UserInfo implements Serializable {
 	@GeneratedValue(generator = "seq_shiro_userinfo", strategy = GenerationType.SEQUENCE)
     private Integer id;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")  
+	@JSONField (format="yyyy-MM-dd")   
     @Temporal(TemporalType.DATE)
     private Date birthday;	
     

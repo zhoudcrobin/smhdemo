@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smhdemo.common.base.BaseException;
-import com.smhdemo.common.security.dao.UserDaoable;
+import com.smhdemo.common.security.dao.UserDao;
 import com.smhdemo.common.security.entity.User;
 /**
  * 
@@ -14,7 +14,7 @@ import com.smhdemo.common.security.entity.User;
 @Service
 public class UserService implements UserServiceable {
 	@Autowired
-	protected UserDaoable userDao;
+	protected UserDao userDao;
 	
 	@Override
 	public Integer addUser(User user) throws BaseException {

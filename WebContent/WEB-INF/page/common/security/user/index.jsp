@@ -22,12 +22,16 @@
 			//ewcmsBOBJ.addToolItem("修改", "icon-edit","updCallBackSelf");
 			//ewcmsBOBJ.delToolItem("删除");
 			//ewcmsBOBJ.addToolItem("删除", "icon-remove","delCallBackSelf");
+			ewcmsBOBJ.addToolItem("权限分配", "icon-remove","permissionAllocate");
 			ewcmsBOBJ.openDataGrid('#tt',{
                 columns:[[
 						{field:'id',title:'序号',width:50,sortable:true},
 						{field:'accountName',title:'用户帐号',width:150,sortable:true},
 		                {field:'userInfo.realName',title:'真实姓名',width:150,formatter:function(val,row){
 		                    return row.userInfo.realName;
+		                }},
+		                {field:'userInfo.birthday',title:'出生日期',width:150,formatter:function(val,row){
+		                	return row.userInfo.birthday;
 		                }}
                   ]],
                   idField:"id",
@@ -47,6 +51,20 @@
 			//ewcmsOOBJ.delOperateBack("accountName");
 		//}
 		
+		function permissionAllocate(){
+				var rows = $('#tt').datagrid('getSelections');
+			    if(rows.length == 0){
+			        $.messager.alert('提示','请选择修改记录','info');
+			        return;
+			    }
+			    if(rows.length > 1){
+			        $.messager.alert('提示','不能选择多条记录进行修改','info');
+			        return;
+			    }
+			    var url = '<c:url value="/common/security/user/roleallocate.do"/>?userID='+rows[0].id;            
+			  
+			    openWindow('#edit-window',{url:url,iframeID:'#editifr'});			
+		}
 		</script>		
 	</head>
 	<body class="easyui-layout">

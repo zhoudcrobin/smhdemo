@@ -2,12 +2,12 @@ package com.smhdemo.common.security.web;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,9 @@ import com.smhdemo.common.query.jpa.QueryCondition;
 import com.smhdemo.common.query.jpa.QueryFactory;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
-import com.smhdemo.common.security.SecurityFacable;
+import com.smhdemo.common.security.SecurityFac;
+import com.smhdemo.common.security.entity.Role;
 import com.smhdemo.common.security.entity.User;
-import com.smhdemo.common.security.entity.UserInfo;
 
 /**
  * 用户前端控制
@@ -43,7 +43,7 @@ public class UserController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(UserController.class);
 	@Autowired
-	private SecurityFacable securityFac;
+	private SecurityFac securityFac;
 	@Autowired
 	private QueryFactory query;
 
@@ -186,4 +186,47 @@ public class UserController {
 	protected DataGrid createDataGrid(Resultable result) {
 		return new DataGrid(result.getCount(), result.getResultList());
 	}
+	
+	@RequestMapping(value = "/roleallocate", method = RequestMethod.GET)
+	public String permissionAllocate(@RequestParam(value = "userID", required = true) String userID,Map<String, Object> map) {
+		Map<String, String> roleMap = new HashMap<String, String>(); 
+		List<String> roles = new ArrayList<String>();
+		RoleSelect roleSelectVo = new RoleSelect();
+		User vo = new User();
+		try{
+			vo = securityFac.getUser(Integer.parseInt(userID));
+			List<Role> roleList = vo.getRoleList();
+			for(Role roleVo:roleList){
+				roles.add(roleVo.getId().toString());
+			}
+			roleSelectVo.setRoles(roles);
+			List<Role> allRoleList = securityFac.getAllRole();
+			for(Role roleVo:allRoleList){
+				roleMap.put(roleVo.getId().toString(), roleVo.getRoleName()+"  ");
+			}
+		}catch(Exception e){}
+		map.put("roleSelect", roleSelectVo);
+		map.put("roleMap", roleMap);
+		map.put("userID", userID);
+		map.put("accountName", vo.getAccountName());
+		return "common/security/user/roleallocate";
+	}
+	
+	@RequestMapping(value = "/roleallocate", method = RequestMethod.POST)
+	public String permissionAllocate(@ModelAttribute RoleSelect roleSelect,@RequestParam(value = "userID", required = true) String userID) {
+		try{
+			User vo = securityFac.getUser(Integer.parseInt(userID));
+			List<String> roles =roleSelect.getRoles();
+			List<Role> roleList = new ArrayList<Role>();
+			for(String roleID:roles){
+				Role roleVo = new Role();
+				roleVo.setId(Integer.parseInt(roleID));
+				roleList.add(roleVo);
+			}
+			vo.setRoleList(roleList);
+			securityFac.updUser(vo);
+			
+		}catch(Exception e){}
+		return "common/security/user/roleallocate";
+	}	
 }

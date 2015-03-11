@@ -1,6 +1,7 @@
 package com.smhdemo.common.security.web;
 
 import javax.validation.Valid;
+
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.smhdemo.common.security.SecurityFacable;
+import com.smhdemo.common.security.SecurityFac;
 import com.smhdemo.common.security.entity.User;
 import com.smhdemo.common.security.entity.UserInfo;
 
@@ -27,7 +28,7 @@ public class LoginUserController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(LoginUserController.class);
 	@Autowired
-	private SecurityFacable securityFac;
+	private SecurityFac securityFac;
 	
 	@RequestMapping(value="/logout",method=RequestMethod.GET)  
     public String logout(){ 

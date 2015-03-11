@@ -7,9 +7,8 @@ import com.smhdemo.common.base.JpaDao;
 import com.smhdemo.common.security.entity.User;
 
 @Repository
-public class UserDao extends JpaDao<Integer,User> implements UserDaoable {
+public class UserDao extends JpaDao<Integer,User> {
 
-	@Override
 	public User getUser(String accountName) {
 		String hql = "From User t Where t.accountName=:accountName and t.enabled=true";
 		TypedQuery<User> query = this.getEntityManager().createQuery(hql, User.class);

@@ -93,16 +93,22 @@
 	               	    </div>  
 	               	    <div class="nav-item">
 	                         <a href="javascript:_home.addTab('权限组','common/security/role/index.do')">
-	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <img src='<c:url value="comresource/image/group.png"/>' style="border:0"/><br/>
 	                            <span>权限组</span>
 	                        </a>
 	               	    </div>
 	               	    <div class="nav-item">
 	                         <a href="javascript:_home.addTab('权限明细','common/security/permission/index.do')">
-	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <img src='<c:url value="comresource/image/role.png"/>' style="border:0"/><br/>
 	                            <span>权限明细</span>
 	                        </a>
-	               	    </div>   	               	                        	
+	               	    </div>
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('登录日志','common/security/loginlog/index.do')">
+	                            <img src='<c:url value="comresource/image/loginlog.png"/>' style="border:0"/><br/>
+	                            <span>登录日志</span>
+	                        </a>
+	               	    </div>  	               	       	               	                        	
 	               	</div>
                	</shiro:hasRole>
 	              	

@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smhdemo.common.base.BaseException;
-import com.smhdemo.common.security.dao.RoleDaoable;
+import com.smhdemo.common.security.dao.RoleDao;
 import com.smhdemo.common.security.entity.Role;
 @Service
 public class RoleService implements RoleServiceable {
 	@Autowired
-	protected RoleDaoable roleDao;
+	protected RoleDao roleDao;
 	
 	@Override
 	public Integer addRole(Role vo) throws BaseException{
