@@ -65,6 +65,23 @@ public class QueryFactory {
 							+ parameters.get(i).getName()
 							+ " in( :"
 							+ parameters.get(i).getName().replace(".", "") + " ) \n");
+				}else if (parameters.get(i).getType() == QueryOperateType.Gt) {
+					sqlBuffer.append("model."
+							+ parameters.get(i).getName()
+							+ " >= :"
+							+ parameters.get(i).getName().replace(".", "") + " \n");
+				}else if (parameters.get(i).getType() == QueryOperateType.Lt) {
+					sqlBuffer.append("model."
+							+ parameters.get(i).getName()
+							+ " <= :"
+							+ parameters.get(i).getName().replace(".", "") + " \n");
+				}else if (parameters.get(i).getType() == QueryOperateType.Between) {
+					sqlBuffer.append("model."
+							+ parameters.get(i).getName()
+							+ " between :"
+							+ parameters.get(i).getName().replace(".", "")
+							+ " and :"
+							+ parameters.get(i).getName().replace(".", "") + "1 \n");
 				}
 			}
 
@@ -80,12 +97,22 @@ public class QueryFactory {
 			logger.info(sqlBuffer.toString());
 			Query queryObject1 = entityManager.createQuery(sqlBuffer.toString());
 			for (int i = 0; i < parameters.size(); i++) {
-				queryObject1.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue());
+				if(parameters.get(i).getType() == QueryOperateType.Between){
+					queryObject1.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue()[0]);
+					queryObject1.setParameter(parameters.get(i).getName().replace(".", "")+"1", parameters.get(i).getValue()[1]);
+				}else{
+					queryObject1.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue()[0]);
+				}
 			}
 			count = queryObject1.getResultList().size();
 			Query queryObject = entityManager.createQuery(sqlBuffer.toString());
 			for (int i = 0; i < parameters.size(); i++) {
-				queryObject.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue());
+				if(parameters.get(i).getType() == QueryOperateType.Between){
+					queryObject.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue()[0]);
+					queryObject.setParameter(parameters.get(i).getName().replace(".", "")+"1", parameters.get(i).getValue()[1]);
+				}else{
+					queryObject.setParameter(parameters.get(i).getName().replace(".", ""), parameters.get(i).getValue()[0]);
+				}
 			}
 			queryObject.setFirstResult((qc.getPage()-1)*qc.getRows());
 			queryObject.setMaxResults(qc.getRows());

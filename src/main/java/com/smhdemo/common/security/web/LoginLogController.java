@@ -1,6 +1,8 @@
 package com.smhdemo.common.security.web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,6 @@ import com.smhdemo.common.query.jpa.QueryFactory;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 import com.smhdemo.common.security.entity.LoginLog;
-import com.smhdemo.common.security.entity.Permission;
 import com.smhdemo.web.BaseController;
 
 /**
@@ -63,7 +64,20 @@ public class LoginLogController extends BaseController{
 					QueryOperateType.Equal);
 			qps.add(qp3);
 		}
-
+		
+		SimpleDateFormat format =   new SimpleDateFormat("yyyy-MM-dd");
+		Date loginTimeStart=null,loginTimeEnd=null;
+		try{
+			loginTimeStart= format.parse(parameters.get("loginTimeStart"));
+			loginTimeEnd= format.parse(parameters.get("loginTimeEnd"));
+		}catch(Exception e){}
+		if (loginTimeStart != null && loginTimeEnd != null) {
+			Object[] betweenVaue={loginTimeStart,loginTimeEnd};
+			QueryParameter qp4 = new QueryParameter("loginTime", betweenVaue,
+					QueryOperateType.Between);
+			qps.add(qp4);
+		}
+		
 		String orderName = model.getOrder();
 		Order order;
 		if (orderName == null || orderName.length() == 0) {

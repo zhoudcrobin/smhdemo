@@ -50,13 +50,13 @@
                             <tr>
                                 <td class="tdtitle">登录账号：</td>
                                 <td class="tdinput">
-                                    <input type="text"  name="roleName" class="inputtext"/>
+                                    <input type="text"  name="accountName" class="inputtext"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdtitle">登录ip地址：</td>
                                 <td class="tdinput">
-                                    <input type="text" name="remark" class="inputtext"/>
+                                    <input type="text" name="ipAddress" class="inputtext"/>
                                 </td>
                             </tr>    
                             <tr>
