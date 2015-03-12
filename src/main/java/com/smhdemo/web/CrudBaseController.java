@@ -3,7 +3,9 @@ package com.smhdemo.web;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.smhdemo.common.query.DataGrid;
 import com.smhdemo.common.query.DataGridModel;
 import com.smhdemo.common.query.Order;
@@ -18,26 +21,20 @@ import com.smhdemo.common.query.Resultable;
 import com.smhdemo.common.query.jpa.QueryCondition;
 import com.smhdemo.common.query.jpa.QueryFactory;
 import com.smhdemo.common.query.jpa.QueryParameter;
-import com.smhdemo.common.security.entity.User;
 /**
  * 
  *  
  * @author zhoudongchu
  */
-public abstract class CrudBaseController<T,PK> {
+public abstract class CrudBaseController<T,PK> extends BaseController{
 	@Autowired
-	private QueryFactory query;
+	protected QueryFactory query;
 	
 	public enum OperatorState {
 
 		add, upd;
 	}
-	
-	public String getForwardPage(String pageFileName){
-		return getPagePath()+"/"+pageFileName;
-	}
-	protected abstract String getPagePath();
-	
+
 	@RequestMapping(value = "/index")
 	public String index() {
 		return getForwardPage("index");
@@ -48,15 +45,15 @@ public abstract class CrudBaseController<T,PK> {
 			@RequestParam(value = "selections", required = false) PK[] selections,
 			Model model) throws Exception {
 		if ((selections == null || selections.length == 0)) {
-			model.addAttribute(getCommondName(), getVO(null));
+			model.addAttribute(getCommondName(), getVO(null,model));
 			model.addAttribute("eventOP", OperatorState.add);
 		} else {
-			model.addAttribute(getCommondName(), getVO(selections[0]));
+			model.addAttribute(getCommondName(), getVO(selections[0],model));
 			model.addAttribute("eventOP", OperatorState.upd);
 		}
 		return getForwardPage("edit");
 	}
-	protected abstract T getVO(PK pk);
+	protected abstract T getVO(PK pk,Model model);
 	protected abstract String getCommondName();
 	
 	/**
@@ -80,7 +77,7 @@ public abstract class CrudBaseController<T,PK> {
 			if (eventOP.equals(OperatorState.upd)) {
 				updSaveOperator(vo);
 			} else if (eventOP.equals(OperatorState.add)) {
-				PK id = addSaveOperator(vo,result);
+				PK id = addSaveOperator(vo,result,model);
 				if(id == null)return getForwardPage("edit");
 				if (addrecordlist.length() == 0) {
 					model.addAttribute("addrecordlist", addrecordlist+ id);
@@ -93,10 +90,10 @@ public abstract class CrudBaseController<T,PK> {
 		} catch (Exception e) {
 
 		}
-		model.addAttribute(getCommondName(), getVO(null));
+		model.addAttribute(getCommondName(), getVO(null,model));
 		return getForwardPage("edit");
 	}
-	protected abstract PK addSaveOperator(T vo,BindingResult result)throws Exception;
+	protected abstract PK addSaveOperator(T vo,BindingResult result,Model model)throws Exception;
 	protected abstract PK updSaveOperator(T vo)throws Exception;
 	
 	
@@ -122,6 +119,7 @@ public abstract class CrudBaseController<T,PK> {
 	public Object query(@ModelAttribute DataGridModel model) {
 		Map<String, String> parameters = model.getParameters();
 		List<QueryParameter> qps = new ArrayList<QueryParameter>();
+		String queryObjectName="";
 		String orderName = model.getOrder();
 		Order order;
 		if (orderName == null || orderName.length() == 0) {
@@ -129,13 +127,13 @@ public abstract class CrudBaseController<T,PK> {
 		} else {
 			order = new Order(model.getSort(), orderName);
 		}
-		queryOperator(qps,parameters);
+		queryObjectName=queryOperator(qps,parameters);
 		return createDataGrid(query.queryByConditions(new QueryCondition(model
-				.getPage(), model.getRows(), order, User.class.getSimpleName(),
+				.getPage(), model.getRows(), order, queryObjectName,
 				qps)));
 	}
 	
-	protected abstract void queryOperator(List<QueryParameter> qps,Map<String, String> parameters);
+	protected abstract String queryOperator(List<QueryParameter> qps,Map<String, String> parameters);
 	/**
 	 * 创建DataGrid VO
 	 * 

@@ -8,11 +8,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 import com.smhdemo.common.security.SecurityFac;
@@ -36,7 +38,7 @@ public class UserController extends CrudBaseController<User,Integer>{
 		return "common/security/user";
 	}
 	@Override
-	protected User getVO(Integer pk) {
+	protected User getVO(Integer pk,Model model) {
 		if(pk != null){
 			try {
 				return securityFac.getUser(pk);
@@ -52,7 +54,7 @@ public class UserController extends CrudBaseController<User,Integer>{
 	}
 
 	@Override
-	protected Integer addSaveOperator(User vo,BindingResult result) throws Exception{
+	protected Integer addSaveOperator(User vo,BindingResult result,Model model) throws Exception{
 		if(securityFac.getUser(vo.getAccountName())!=null){
 			result.rejectValue("accountName", "账号已存在","账号已存在");
 			return null;
@@ -71,7 +73,7 @@ public class UserController extends CrudBaseController<User,Integer>{
 	}	
 	
 	@Override
-	protected void queryOperator(List<QueryParameter> qps,Map<String, String> parameters) {
+	protected String queryOperator(List<QueryParameter> qps,Map<String, String> parameters) {
 		String selections = parameters.get("selections");
 		if (selections != null && selections.length() > 0) {
 			List<Integer> pks = new ArrayList<Integer>();
@@ -97,7 +99,9 @@ public class UserController extends CrudBaseController<User,Integer>{
 			QueryParameter qp3 = new QueryParameter("userInfo.realName", niceName,
 					QueryOperateType.CharIn);
 			qps.add(qp3);
-		}	
+		}
+		
+		return User.class.getSimpleName();
 	}
 
 	@RequestMapping(value = "/roleallocate", method = RequestMethod.GET)
@@ -140,6 +144,6 @@ public class UserController extends CrudBaseController<User,Integer>{
 			securityFac.updUser(vo);
 			
 		}catch(Exception e){}
-		return getForwardPage("roleallocate");
+		return getForwardPage("allocatesuccess");
 	}
 }

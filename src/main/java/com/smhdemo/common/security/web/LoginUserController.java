@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import com.smhdemo.common.security.SecurityFac;
 import com.smhdemo.common.security.entity.User;
 import com.smhdemo.common.security.entity.UserInfo;
+import com.smhdemo.web.BaseController;
 
 /**
  * 
@@ -24,12 +26,16 @@ import com.smhdemo.common.security.entity.UserInfo;
  */
 @Controller
 @RequestMapping(value = "/common/security/loginuser")
-public class LoginUserController {
+public class LoginUserController extends BaseController{
 	private static final Logger logger = LoggerFactory
 			.getLogger(LoginUserController.class);
 	@Autowired
 	private SecurityFac securityFac;
 	
+	@Override
+	protected String getPagePath() {
+		return "common/security/loginuser";
+	}
 	@RequestMapping(value="/logout",method=RequestMethod.GET)  
     public String logout(){ 
 		//使用权限管理工具进行用户的退出，跳出登录，给出提示信息
@@ -45,12 +51,12 @@ public class LoginUserController {
 		}catch(Exception e){
 			logger.debug(e.toString());
 		}
-		return "common/security/loginuser/updinfo";
+		return getForwardPage("updinfo");
 	}
 	@RequestMapping(value="/updinfo",method=RequestMethod.POST)
 	public String updUserInfo(@Valid @ModelAttribute UserInfo userInfo, BindingResult result,Model model){
         if(result.hasErrors()){
-            return "common/security/loginuser/updinfo";
+            return getForwardPage("updinfo");
         } 
 		String loginName = (String)SecurityUtils.getSubject().getPrincipal();
 		try{
@@ -61,13 +67,12 @@ public class LoginUserController {
 		}catch(Exception e){
 			logger.debug(e.toString());
 		}
-		
-		return "common/security/loginuser/updinfo";
+		return getForwardPage("updinfo");
 	}
 	
 	@RequestMapping(value="/updpassword",method=RequestMethod.GET)
 	public String updUserPassword(){
-		return "common/security/loginuser/updpassword";
+		return getForwardPage("updpassword");
 	}
 	
 	@RequestMapping(value="/updpassword",method=RequestMethod.POST)
@@ -92,12 +97,11 @@ public class LoginUserController {
 		}catch(Exception e){
 			logger.debug(e.toString());
 		}
-		
-		return "common/security/loginuser/updpassword";
+		return getForwardPage("updpassword");
 	}	
 	@RequestMapping("/403.do")
 	public String unauthorizedRole(){
-		return "common/security/loginuser/accessdenied";
+		return getForwardPage("accessdenied");
 	}	
 }
 

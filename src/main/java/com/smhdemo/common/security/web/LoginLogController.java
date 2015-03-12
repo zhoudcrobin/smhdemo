@@ -20,6 +20,7 @@ import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 import com.smhdemo.common.security.entity.LoginLog;
 import com.smhdemo.common.security.entity.Permission;
+import com.smhdemo.web.BaseController;
 
 /**
  * 
@@ -28,12 +29,19 @@ import com.smhdemo.common.security.entity.Permission;
  */
 @Controller
 @RequestMapping(value = "/common/security/loginlog")
-public class LoginLogController {
+public class LoginLogController extends BaseController{
 	@Autowired
 	private QueryFactory query;
+	
+	
+	@Override
+	protected String getPagePath() {
+		return "common/security/loginlog";
+	}
+
 	@RequestMapping(value = "/index")
 	public String indexLoginLog() {
-		return "common/security/loginlog/index";
+		return getForwardPage("index");
 	}
 	
 	@RequestMapping(value = "/query")
