@@ -75,7 +75,7 @@ public abstract class CrudBaseController<T,PK> extends BaseController{
         } 
 		try {
 			if (eventOP.equals(OperatorState.upd)) {
-				updSaveOperator(vo);
+				updSaveOperator(vo,result,model);
 			} else if (eventOP.equals(OperatorState.add)) {
 				PK id = addSaveOperator(vo,result,model);
 				if(id == null)return getForwardPage("edit");
@@ -94,7 +94,7 @@ public abstract class CrudBaseController<T,PK> extends BaseController{
 		return getForwardPage("edit");
 	}
 	protected abstract PK addSaveOperator(T vo,BindingResult result,Model model)throws Exception;
-	protected abstract PK updSaveOperator(T vo)throws Exception;
+	protected abstract PK updSaveOperator(T vo, BindingResult result, Model model)throws Exception;
 	
 	
 	@RequestMapping(value = "/delete")
@@ -106,7 +106,7 @@ public abstract class CrudBaseController<T,PK> extends BaseController{
 			try{
 				deleteOperator(pk);
 			} catch (Exception e) {
-
+				return "false";
 			}
 		}
 		return "true";

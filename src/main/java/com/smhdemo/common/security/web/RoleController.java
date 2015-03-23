@@ -68,7 +68,7 @@ public class RoleController extends CrudBaseController<Role,Integer>{
 	}
 
 	@Override
-	protected Integer updSaveOperator(Role vo) throws Exception {
+	protected Integer updSaveOperator(Role vo, BindingResult result, Model model) throws Exception {
 		return securityFac.updRole(vo);
 	}
 

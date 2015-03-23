@@ -20,9 +20,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
-
 import org.hibernate.validator.constraints.NotBlank;
-
 import com.alibaba.fastjson.annotation.JSONType;
 /**
  * <ul>

@@ -62,7 +62,7 @@ public class UserController extends CrudBaseController<User,Integer>{
 		return securityFac.addUser(vo);
 	}
 	@Override
-	protected Integer updSaveOperator(User vo) throws Exception{
+	protected Integer updSaveOperator(User vo, BindingResult result, Model model) throws Exception{
 		return securityFac.updUser(vo);
 	}
 
@@ -130,9 +130,9 @@ public class UserController extends CrudBaseController<User,Integer>{
 	}
 	
 	@RequestMapping(value = "/roleallocate", method = RequestMethod.POST)
-	public String permissionAllocate(@ModelAttribute RoleSelect roleSelect,@RequestParam(value = "userID", required = true) String userID) {
+	public String permissionAllocate(@ModelAttribute RoleSelect roleSelect,@RequestParam(value = "userID", required = true) int userID) {
 		try{
-			User vo = securityFac.getUser(Integer.parseInt(userID));
+			User vo = securityFac.getUser(userID);
 			List<String> roles =roleSelect.getRoles();
 			List<Role> roleList = new ArrayList<Role>();
 			for(String roleID:roles){

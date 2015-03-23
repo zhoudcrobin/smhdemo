@@ -111,7 +111,32 @@
 	               	    </div>  	               	       	               	                        	
 	               	</div>
                	</shiro:hasRole>
-	              	
+	               	<div title="系统报表" style="overflow:auto;">
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('报表分类','common/report/category/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>报表分类</span>
+	                        </a>
+	               	    </div> 
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('文字报表','common/report/text/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>文字报表</span>
+	                        </a>
+	               	    </div> 
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('图形报表','common/report/chart/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>图形报表</span>
+	                        </a>
+	               	    </div>
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('报表制作','common/report/build/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>报表制作</span>
+	                        </a>
+	               	    </div>		               	    	               	     	               	       	               	                        	
+	               	</div>               		
         	</div>  
 		</div>        
       	<div data-options="region:'center'" style="overflow:hidden;">

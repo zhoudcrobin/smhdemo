@@ -27,7 +27,7 @@
 	</head>
 	<body >
 		<f:form action="save.do" method="post" commandName="permission">
-			<table>
+			<table >
 				<tr>
 					<td>权限名称：</td>
 					<td>

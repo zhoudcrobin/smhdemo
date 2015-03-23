@@ -60,7 +60,7 @@ public class PermissionController extends CrudBaseController<Permission,Integer>
 	}
 
 	@Override
-	protected Integer updSaveOperator(Permission vo) throws Exception {
+	protected Integer updSaveOperator(Permission vo, BindingResult result, Model model) throws Exception {
 		return securityFac.updPermission(vo);
 	}
 
