@@ -10,11 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.smhdemo.common.report.entity.Parameter;
-import com.smhdemo.common.report.entity.data.StaticData;
-import com.smhdemo.common.report.entity.view.ComponentView;
-import com.smhdemo.common.report.entity.view.SessionView;
 
 /**
  * 数据库中的参数值转换成页面对象

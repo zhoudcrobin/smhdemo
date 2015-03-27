@@ -39,7 +39,16 @@
 					<td>
 						<input type="file" name="reportFile" accept="jrxml" theme="simple" onchange="javascript:if(this.value.toLowerCase().lastIndexOf('jrxml')==-1){alert('请选择jrxml文件！');this.value='';}"/>  
 					</td>
-				</tr>				
+				</tr>	
+				<tr>
+					<td>报表数据源：</td>
+					<td>
+				        <f:select path="baseDS.id">  
+	            			<f:option value="-1" label="默认数据源"/>  
+	            			<f:options items="${baseDSList}" itemValue="id" itemLabel="name"/>  
+	        			</f:select> 
+					</td>
+				</tr>								
 				<tr>
 					<td>备注：</td>
 					<td>

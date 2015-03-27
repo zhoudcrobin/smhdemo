@@ -51,7 +51,11 @@ public class ReportFac {
 	public List<Chart> findAllChart() {
 		return chartService.findAllChart();
 	}
-
+	
+	public void updChartParameter( List<Parameter> parameters)
+			throws BaseException{
+		chartService.updChartParameter(parameters);
+	}
 	public Long addCategory(Category vo) {
 		return categoryService.addCategory(vo);
 	}
@@ -87,9 +91,9 @@ public class ReportFac {
 	public Long updText(Text vo) throws BaseException {
 		return textService.updText(vo);
 	}
-	public void updTextParameter(Long textId, List<Parameter> parameters)
+	public void updTextParameter(List<Parameter> parameters)
 			throws BaseException {
-		textService.updTextParameter(textId, parameters);
+		textService.updTextParameter(parameters);
 	}
 	
 	public void delText(Long pk) {
@@ -103,16 +107,6 @@ public class ReportFac {
 	public List<Text> findAllText() {
 		return textService.findAllText();
 	}	
-	
-	public Long updChartParameter(Long chartId, Parameter parameter)
-			throws BaseException {
-		return chartService.updChartParameter(chartId, parameter);
-	}
-
-	public Long updTextParameter(Long textId, Parameter parameter)
-			throws BaseException {
-		return textService.updTextParameter(textId, parameter);
-	}
 
 	public Parameter getParameter(Long pk) {
 		return parameterService.getParameter(pk);
@@ -127,11 +121,6 @@ public class ReportFac {
 			Long categoryId) {
 		return categoryService.findChartIsEntityByChartAndCategory(chartId, categoryId);
 	}
-
-//	@Override
-//	public void publishRepository(List<Long> repositoryIds, Site site){
-//		repositoryService.publishRepository(repositoryIds, site);
-//	}
 
 	public Boolean findSessionIsEntityByParameterIdAndUserName(Long parameterId, String userName) {
 		return parameterService.findSessionIsEntityByParameterIdAndUserName(parameterId, userName);

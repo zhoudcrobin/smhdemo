@@ -21,8 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.smhdemo.common.report.entity.data.Data;
-import com.smhdemo.common.report.entity.view.ComponentView;
 
 /**
  * 报表参数
@@ -88,12 +86,12 @@ public class Parameter implements Serializable {
     private String defaultValue;
     @Column(name = "value")
     private String value;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ComponentView.class)
-    @JoinColumn(name = "componentview_id")
-    private ComponentView componentView = new ComponentView();
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Data.class)
-    @JoinColumn(name = "data_id")
-    private Data data = new Data();
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ComponentView.class)
+//    @JoinColumn(name = "componentview_id")
+//    private ComponentView componentView = new ComponentView();
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Data.class)
+//    @JoinColumn(name = "data_id")
+//    private Data data = new Data();
 
     public Long getId() {
         return id;
@@ -158,11 +156,6 @@ public class Parameter implements Serializable {
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
-
-    public ComponentView getComponentView() {
-        return componentView;
-    }
-
     public String getValue() {
 		return value;
 	}
@@ -170,18 +163,20 @@ public class Parameter implements Serializable {
 	public void setValue(String value) {
 		this.value = value;
 	}
-
-	public void setComponentView(ComponentView componentView) {
-        this.componentView = componentView;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
+//    public ComponentView getComponentView() {
+//        return componentView;
+//    }
+//	public void setComponentView(ComponentView componentView) {
+//        this.componentView = componentView;
+//    }
+//
+//    public Data getData() {
+//        return data;
+//    }
+//
+//    public void setData(Data data) {
+//        this.data = data;
+//    }
 
     @Override
     public int hashCode() {

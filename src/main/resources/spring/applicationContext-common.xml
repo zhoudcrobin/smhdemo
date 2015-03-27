@@ -67,5 +67,11 @@
     <aop:config>
         <aop:pointcut id="txPointcut" expression="execution(* com.smhdemo.common.*.service.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
-    </aop:config>   
+    </aop:config>  
+	<bean id="objectPoolFactory" class="org.apache.commons.pool.impl.GenericObjectPoolFactory">
+		<constructor-arg type="org.apache.commons.pool.PoolableObjectFactory">
+			<null />
+		</constructor-arg>
+		<constructor-arg type="int" value="5000" />
+	</bean>     
 </beans>

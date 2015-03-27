@@ -54,13 +54,15 @@ public class PermissionController extends CrudBaseController<Permission,Integer>
 			vo.setRole(null);
 		}
 		int id = securityFac.addPermission(vo);
-		List<Role> roleList = securityFac.getAllRole();
-		model.addAttribute("roleList", roleList);
+
 		return id;
 	}
 
 	@Override
 	protected Integer updSaveOperator(Permission vo, BindingResult result, Model model) throws Exception {
+		if(vo.getRole().getId()==-1){
+			vo.setRole(null);
+		}
 		return securityFac.updPermission(vo);
 	}
 

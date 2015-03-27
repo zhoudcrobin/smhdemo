@@ -10,17 +10,20 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
 import com.smhdemo.common.base.BaseException;
 import com.smhdemo.common.report.dao.CategoryDao;
 import com.smhdemo.common.report.dao.ChartDao;
+import com.smhdemo.common.report.dao.ParameterDao;
 import com.smhdemo.common.report.entity.Category;
 import com.smhdemo.common.report.entity.Chart;
 import com.smhdemo.common.report.entity.Parameter;
+import com.smhdemo.common.report.entity.Text;
 import com.smhdemo.common.report.util.ChartAnalysisUtil;
-import com.smhdemo.common.report.util.ParameterSetValueUtil;
 /**
  * 
  * @author zhoudongchu
@@ -33,6 +36,8 @@ public class ChartService implements ChartServiceable {
 	private CategoryDao categoryDao;
 	@Autowired
 	private ChartDao chartDao;
+	@Autowired
+	private ParameterDao parameterDao;
 	
 	@Override
 	public Long addChart(Chart vo) {
@@ -54,7 +59,7 @@ public class ChartService implements ChartServiceable {
 		Chart entity = chartDao.get(vo.getId());
 		
 		entity.setName(vo.getName());
-//		entity.setBaseDS(vo.getBaseDS());
+		entity.setBaseDS(vo.getBaseDS());
 		entity.setType(vo.getType());
 		entity.setShowTooltips(vo.getShowTooltips());
 		entity.setChartTitle(vo.getChartTitle());
@@ -88,18 +93,13 @@ public class ChartService implements ChartServiceable {
 		
 		if (!entity.getChartSql().equals(vo.getChartSql())) {
 			entity.setChartSql(vo.getChartSql());
-			Set<Parameter> icNewList = new LinkedHashSet<Parameter>();
-			
 			Set<Parameter> oldParameters = entity.getParameters();
+			oldParameters.clear();
 			Set<Parameter> newParameters = ChartAnalysisUtil.analysisSql(vo.getChartSql());
 			for (Parameter newParameter : newParameters){
-				Parameter ic = findListEntity(oldParameters,newParameter);
-				if (ic == null){
-					ic = newParameter;
-				}
-				icNewList.add(ic);
-			}
-			entity.setParameters(icNewList);
+				oldParameters.add(newParameter);
+			}	
+			entity.setParameters(oldParameters);
 		}
 		chartDao.merge(entity);
 		return vo.getId();
@@ -144,44 +144,15 @@ public class ChartService implements ChartServiceable {
 	}
 
 	@Override
-	public Long updChartParameter(Long chartId, Parameter parameter)
+	public void updChartParameter(List<Parameter> parameters)
 			throws BaseException {
-		if (chartId == null || chartId.intValue() == 0)
-			throw new BaseException("", "图型编号不存在，请重新选择！");
-		Chart chart = chartDao.get(chartId);
-		if (chart == null)
-			throw new BaseException("", "图型不存在，请重新选择！");
-		
-		parameter = ParameterSetValueUtil.setParametersValue(parameter);
-		
-		Set<Parameter> parameters = chart.getParameters();
-		parameters.remove(parameter);
-		parameters.add(parameter);
-		chart.setParameters(parameters);
-		
-		chartDao.merge(chart);	
-		
-		return parameter.getId();
-	}
-	/**
-	 * 根据参数名查询数据库中的参数集合
-	 * 
-	 * @param oldParameters
-	 *            数据库中的报表参数集合
-	 * @param newParameter 新参数
-	 *            
-	 * @return Parameter
-	 */
-	private Parameter findListEntity(Set<Parameter> oldParameters, Parameter newParameter) {
-		for (Parameter parameter : oldParameters) {
-			String rpEnName = parameter.getEnName();
-			if (newParameter.getEnName().trim().equals(rpEnName.trim())) {
-				parameter.setClassName(newParameter.getClassName());
-				parameter.setDefaultValue(newParameter.getDefaultValue());
-				parameter.setDescription(newParameter.getDescription());
-				return parameter;
-			}
+		for(Parameter vo:parameters){
+			Parameter oldvo = parameterDao.get(vo.getId());
+			oldvo.setCnName(vo.getCnName());
+			oldvo.setDefaultValue(vo.getDefaultValue());
+			oldvo.setType(vo.getType());
+			oldvo.setValue(vo.getValue());
+			parameterDao.merge(oldvo);
 		}
-		return null;
 	}
 }

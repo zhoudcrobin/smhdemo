@@ -11,6 +11,7 @@
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>' title="default">
 	</head>
 	<body >
+		<c:if test="${empty actionResult}">
 		<f:form action="parameter.do" method="post">
 			<table width="100%" border=1>
 				<tr>
@@ -44,7 +45,10 @@
 				</tr>
 				</c:forEach>	
 			</table>
-			<input type="hidden" name="textId" value="${textId}"/>
 		</f:form>
+		</c:if>
+		<c:if test="${not empty actionResult}">
+		<c:out value="${actionResult}"/>
+		</c:if>
 	</body>
 </html>

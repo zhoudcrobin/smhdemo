@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import com.smhdemo.common.report.entity.Parameter;
 
 /**
+ *参数格式 $p{name=kaoshiid|class=java.lang.String|des=考试编号|dv=072|}
  * @author zhoudongchu
  */
 public class ChartAnalysisUtil {

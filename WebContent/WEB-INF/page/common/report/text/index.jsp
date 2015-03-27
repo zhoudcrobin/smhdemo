@@ -59,9 +59,9 @@
 				$.messager.alert('提示', '只能选择一个预览', 'info');
 				return;
 			}
-			var url = '<s:url namespace="/report/show" action="paraset"/>?reportType=text&reportId='+ rows[0].id;
-			$('#parameterifr').attr('src',url);
-			ewcmsBOBJ.openWindow("#parameter-window",{width:400,height:213,title:"参数选择"});
+			var url = '<c:url value="/common/report/build/make.do"/>?reportType=text&reportId='+ rows[0].id;
+			$('#editifr').attr('src',url);
+			ewcmsBOBJ.openWindow("#edit-window");
 		}
 		
 		function parameterSetOperate(){

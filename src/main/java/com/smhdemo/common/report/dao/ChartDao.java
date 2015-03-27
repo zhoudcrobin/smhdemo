@@ -24,7 +24,7 @@ import com.smhdemo.common.report.entity.Chart;
 public class ChartDao extends JpaDao<Long, Chart> {
 	
 	public List<Category> findCategoryReportByChartReportId(final Long chartReportId){
-		String hql = "Select c From Category As c Left Join c.charts As t Where t.id=:chartReportId";
+		String hql = "Select c From Category As c Left Join c.chartReports As t Where t.id=:chartReportId";
 		
 		TypedQuery<Category> query = this.getEntityManager().createQuery(hql, Category.class);
 		query.setParameter("chartReportId", chartReportId);

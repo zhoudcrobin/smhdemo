@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.smhdemo.common.datasource.DataSourceFac;
 import com.smhdemo.common.query.DataGridModel;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
@@ -43,8 +44,11 @@ import com.smhdemo.web.CrudBaseController;
 public class TextController extends CrudBaseController<Text,Long>{
 	@Autowired
 	private ReportFac reportFac;
+	@Autowired
+	private DataSourceFac dataSourceFac;
 	@Override
 	protected Text getVO(Long pk, Model model) {
+		model.addAttribute("baseDSList", dataSourceFac.findAllBase());
 		if(pk != null){
 			try {
 				return reportFac.getText(pk);
@@ -106,11 +110,17 @@ public class TextController extends CrudBaseController<Text,Long>{
 	@Override
 	protected Long addSaveOperator(Text vo, BindingResult result, Model model)
 			throws Exception {
+		if(vo.getBaseDS().getId()==-1){
+			vo.setBaseDS(null);
+		}
 		return reportFac.addText(vo);
 	}
 
 	@Override
 	protected Long updSaveOperator(Text vo, BindingResult result, Model model) throws Exception {
+		if(vo.getBaseDS().getId()==-1){
+			vo.setBaseDS(null);
+		}
 		return reportFac.updText(vo);
 	}
 
@@ -200,15 +210,15 @@ public class TextController extends CrudBaseController<Text,Long>{
 	public String permissionAllocate(@RequestParam(value = "textId", required = true) long textId,Model model) {
 		model.addAttribute("parameterList", reportFac.getText(textId).getParameters());
 		model.addAttribute("typeEnum", Parameter.Type.values());
-		model.addAttribute("textId", textId);
 		return getForwardPage("parameter");
 	}
 	
 	@RequestMapping(value = "/parameter", method = RequestMethod.POST)
-	public String permissionAllocate(@RequestParam(value = "textId", required = true) long textId,@ModelAttribute ParameterList model) {
+	public String permissionAllocate(@ModelAttribute ParameterList parameterList,Model model) {
 		try{
-			reportFac.updTextParameter(textId, model.getParameterList());
-		}catch(Exception e){}
+			reportFac.updTextParameter(parameterList.getParameterList());
+			model.addAttribute("actionResult", "参数设置成功");
+		}catch(Exception e){model.addAttribute("actionResult", "参数设置失败");}
 		return getForwardPage("parameter");
 	}
 }

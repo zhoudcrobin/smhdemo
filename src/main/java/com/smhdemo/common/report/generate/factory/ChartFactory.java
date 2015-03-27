@@ -51,7 +51,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.smhdemo.common.report.BaseException;
+import com.smhdemo.common.base.BaseException;
+import com.smhdemo.common.datasource.entity.Base;
+import com.smhdemo.common.datasource.generate.factory.DataSourceFactoryable;
+import com.smhdemo.common.datasource.generate.factory.init.InitDataSourceFactoryable;
+import com.smhdemo.common.datasource.generate.service.DataSourceServiceable;
 import com.smhdemo.common.report.entity.Chart;
 import com.smhdemo.common.report.entity.Parameter;
 import com.smhdemo.common.report.generate.convert.ConvertException;
@@ -66,18 +70,10 @@ import com.smhdemo.common.report.generate.util.ParamConversionPage;
 public class ChartFactory implements ChartFactoryable {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChartFactory.class);
-//    @Autowired
-//    private EwcmsDataSourceFactoryable ewcmsDataSourceFactory;
+    @Autowired
+    private InitDataSourceFactoryable initDataSourceFactory;
     @Autowired
     private DataSource dataSource;
-
-//    public void setAlqcDataSourceFactory(EwcmsDataSourceFactoryable alqcDataSourceFactory) {
-//        this.ewcmsDataSourceFactory = alqcDataSourceFactory;
-//    }
-//
-//    public EwcmsDataSourceFactoryable getAlqcDataSourceFactory() {
-//        return this.ewcmsDataSourceFactory;
-//    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -316,21 +312,20 @@ public class ChartFactory implements ChartFactoryable {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         Connection con = null;
        
-//        EwcmsDataSourceServiceable service = null;
+        DataSourceServiceable service = null;
         int colCount;
         try {
-//            BaseDS dataSet = report.getBaseDS();
+            Base dataSet = report.getBaseDS();
             String executableSQL = report.getChartSql();
-            con = dataSource.getConnection();
-//			executableSQL = replaceParam(pageParams, report.getParameters(), executableSQL, true);
+			executableSQL = replaceParam(pageParams, report.getParameters(), executableSQL, true);
 
-//            if (dataSet == null) {
-//                con = dataSource.getConnection();
-//            } else {
-//                DataSourceFactoryable factory = (DataSourceFactoryable) getAlqcDataSourceFactory().getBean(dataSet.getClass());
-//                service = factory.createService(dataSet);
-//                con = service.openConnection();
-//            }
+            if (dataSet == null) {
+                con = dataSource.getConnection();
+            } else {
+                DataSourceFactoryable factory = (DataSourceFactoryable) initDataSourceFactory.getBean(dataSet.getClass());
+                service = factory.createService(dataSet);
+                con = service.openConnection();
+            }
 
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(executableSQL);
@@ -345,11 +340,6 @@ public class ChartFactory implements ChartFactoryable {
                     	}catch(Exception e){
                     		dataset.addValue(rs.getDouble(2), "", (Comparable) rs.getObject(1));
                     	}
-//                    	if (rs.getMetaData().getColumnType(1) == Types.NUMERIC){
-//                            dataset.addValue(rs.getDouble(1), "", (Comparable) rs.getObject(2));
-//                    	}else if (rs.getMetaData().getColumnType(2) == Types.NUMERIC) {
-//                            dataset.addValue(rs.getDouble(2), "", (Comparable) rs.getObject(1));
-//                    	}
                     } catch (Exception e) {
                     	logger.error("定义的SQL表达式有错误",e);
                     	throw new BaseException("定义的SQL表达式有错误","定义的SQL表达式有错误");
@@ -358,16 +348,6 @@ public class ChartFactory implements ChartFactoryable {
             } else if (colCount == 3) {
                 while (rs.next()) {
                     try {
-//                    	log.info(rs.getMetaData().getColumnType(1));
-//                    	log.info(rs.getMetaData().getColumnType(2));
-//                    	log.info(rs.getMetaData().getColumnType(3));
-//                    	if (rs.getMetaData().getColumnType(1) == Types.NUMERIC){
-//                            dataset.addValue(rs.getDouble(1), (Comparable) rs.getObject(2), (Comparable) rs.getObject(3));
-//                    	}else if (rs.getMetaData().getColumnType(2) == Types.NUMERIC){
-//                    		dataset.addValue(rs.getDouble(2), (Comparable) rs.getObject(1), (Comparable) rs.getObject(3));
-//                    	}else if (rs.getMetaData().getColumnType(3) == Types.NUMERIC){
-//                    		dataset.addValue(rs.getDouble(3), (Comparable) rs.getObject(1), (Comparable) rs.getObject(2));
-//                    	}
                     	try{
                     		dataset.addValue(rs.getDouble(3), (Comparable) rs.getObject(1), (Comparable) rs.getObject(2));
                     	}catch(Exception e){
@@ -388,12 +368,12 @@ public class ChartFactory implements ChartFactoryable {
             }
             st.close();
             rs.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
         	throw new BaseException(e.toString(),e.toString());
         } finally {
-//            if (service != null) {
-//                service.closeConnection();
-//            }
+            if (service != null) {
+                service.closeConnection();
+            }
             if (con != null) {
                 try {
                     con.close();

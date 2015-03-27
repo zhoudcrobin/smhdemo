@@ -130,20 +130,24 @@ public class UserController extends CrudBaseController<User,Integer>{
 	}
 	
 	@RequestMapping(value = "/roleallocate", method = RequestMethod.POST)
-	public String permissionAllocate(@ModelAttribute RoleSelect roleSelect,@RequestParam(value = "userID", required = true) int userID) {
+	public String permissionAllocate(@ModelAttribute RoleSelect roleSelect,@RequestParam(value = "userID", required = true) int userID,Model model) {
 		try{
 			User vo = securityFac.getUser(userID);
 			List<String> roles =roleSelect.getRoles();
+
 			List<Role> roleList = new ArrayList<Role>();
-			for(String roleID:roles){
-				Role roleVo = new Role();
-				roleVo.setId(Integer.parseInt(roleID));
-				roleList.add(roleVo);
+			if(roles!=null){
+				for(String roleID:roles){
+					Role roleVo = new Role();
+					roleVo.setId(Integer.parseInt(roleID));
+					roleList.add(roleVo);
+				}
 			}
 			vo.setRoleList(roleList);
 			securityFac.updUser(vo);
+			model.addAttribute("actionResult", "权限分配成功");
 			
-		}catch(Exception e){}
-		return getForwardPage("allocatesuccess");
+		}catch(Exception e){model.addAttribute("actionResult", "权限分配失败");}
+		return getForwardPage("roleallocate");
 	}
 }

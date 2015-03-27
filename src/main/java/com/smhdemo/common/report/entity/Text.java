@@ -29,6 +29,7 @@ import javax.persistence.TemporalType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.smhdemo.common.datasource.entity.Base;
 
 /**
  * 报表对象
@@ -99,13 +100,13 @@ public class Text implements Serializable {
     private Boolean hidden;
     @Column(name = "remark",columnDefinition = "text")
     private String remark;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Parameter.class)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Parameter.class,orphanRemoval = true)
     @JoinColumn(name = "text_id")
     @OrderBy("id")
     private Set<Parameter> parameters = new LinkedHashSet<Parameter>();
-//    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER, targetEntity = BaseDS.class)
-//    @JoinColumn(name = "base_ds_id")
-//    private BaseDS baseDS = new BaseDS();
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "base_ds_id")
+    private Base baseDS;
     
     public Text(){
     	createDate = new Date(Calendar.getInstance().getTime().getTime());
@@ -176,13 +177,13 @@ public class Text implements Serializable {
         this.parameters = parameters;
     }
 
-//    public BaseDS getBaseDS() {
-//        return baseDS;
-//    }
-//
-//    public void setBaseDS(BaseDS baseDS) {
-//        this.baseDS = baseDS;
-//    }
+	public Base getBaseDS() {
+		return baseDS;
+	}
+
+	public void setBaseDS(Base baseDS) {
+		this.baseDS = baseDS;
+	}
 
 	@Override
     public int hashCode() {

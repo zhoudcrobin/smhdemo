@@ -62,5 +62,5 @@ public interface ChartServiceable {
 	 * @param pagesList 页面参数集合
 	 * @throws BaseException
 	 */
-	public Long updChartParameter(Long chartId,Parameter parameter) throws BaseException;
+	public void updChartParameter(List<Parameter> parameters) throws BaseException;
 }

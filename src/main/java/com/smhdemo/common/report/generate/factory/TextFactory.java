@@ -24,7 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.smhdemo.common.report.BaseRuntimeException;
+import com.smhdemo.common.base.BaseRuntimeException;
+import com.smhdemo.common.datasource.entity.Base;
+import com.smhdemo.common.datasource.generate.factory.DataSourceFactoryable;
+import com.smhdemo.common.datasource.generate.factory.init.InitDataSourceFactoryable;
+import com.smhdemo.common.datasource.generate.service.DataSourceServiceable;
 import com.smhdemo.common.report.entity.Parameter;
 import com.smhdemo.common.report.entity.Text;
 import com.smhdemo.common.report.entity.Text.Type;
@@ -58,16 +62,9 @@ public class TextFactory implements TextFactoryable {
     }
     @Autowired
     private DataSource dataSource;
-//    @Autowired
-//    private EwcmsDataSourceFactoryable ewcmsDataSourceFactory;
+    @Autowired
+    private InitDataSourceFactoryable initDataSourceFactory;
 
-//    public void setAlqcDataSourceFactory(EwcmsDataSourceFactoryable alqcDataSourceFactory) {
-//        this.ewcmsDataSourceFactory = alqcDataSourceFactory;
-//    }
-//
-//    public EwcmsDataSourceFactoryable getAlqcDataSourceFactory() {
-//        return this.ewcmsDataSourceFactory;
-//    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -75,7 +72,7 @@ public class TextFactory implements TextFactoryable {
 
     @SuppressWarnings("unchecked")
 	public byte[] export(Map<String, String> parameters, Text report, Type type, HttpServletResponse response, HttpServletRequest request) {
-//        EwcmsDataSourceServiceable service = null;
+        DataSourceServiceable service = null;
         try {
             if (report == null) {
                 return null;
@@ -118,27 +115,27 @@ public class TextFactory implements TextFactoryable {
 	                textParam.put(param.getEnName(), paramValue);
 	            }
             }
-            textParam.put(JRParameter.REPORT_CONNECTION, dataSource.getConnection());
+//            textParam.put(JRParameter.REPORT_CONNECTION, dataSource.getConnection());
             // 取得数据源
-//            BaseDS alqcDataSource = report.getBaseDS();
-//            if (alqcDataSource == null) {
-//                // 使用系统数据源
-//                textParam.put(JRParameter.REPORT_CONNECTION, dataSource.getConnection());
-//            } else {
-//                // 使用外部数据
-//                DataSourceFactoryable factory = (DataSourceFactoryable) getAlqcDataSourceFactory().getBean(alqcDataSource.getClass());
-//                service = factory.createService(alqcDataSource);
-//                textParam.put(JRParameter.REPORT_CONNECTION, service.openConnection());
-//            }
+            Base alqcDataSource = report.getBaseDS();
+            if (alqcDataSource == null) {
+                // 使用系统数据源
+                textParam.put(JRParameter.REPORT_CONNECTION, dataSource.getConnection());
+            } else {
+                // 使用外部数据
+                DataSourceFactoryable factory = (DataSourceFactoryable) initDataSourceFactory.getBean(alqcDataSource.getClass());
+                service = factory.createService(alqcDataSource);
+                textParam.put(JRParameter.REPORT_CONNECTION, service.openConnection());
+            }
 
             return textEngineClass.export(in, type, textParam, response, request);
         } catch (Exception e) {
             logger.error("Text Export Exception", e);
             throw new BaseRuntimeException(e.toString());
         } finally {
-//            if (service != null) {
-//                service.closeConnection();
-//            }
+            if (service != null) {
+                service.closeConnection();
+            }
         }
     }
 

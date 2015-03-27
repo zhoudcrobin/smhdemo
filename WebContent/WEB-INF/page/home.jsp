@@ -81,7 +81,7 @@
                 <div id="exit-menu">退出</div>
              </div>
 		</div>
-		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:180px;padding:1px;overflow:hidden;">
+		<div data-options="region:'west',split:true,title:'功能菜单列表'" style="width:180px;padding:1px;overflow:hidden;">
 			<div  class="easyui-accordion"  fit=true border="false">
 				<shiro:hasRole name="adminmanager">
 	               	<div title="权限管理" style="overflow:auto;">
@@ -111,7 +111,7 @@
 	               	    </div>  	               	       	               	                        	
 	               	</div>
                	</shiro:hasRole>
-	               	<div title="系统报表" style="overflow:auto;">
+	               	<div title="报表系统" style="overflow:auto;">
 	               	    <div class="nav-item">
 	                         <a href="javascript:_home.addTab('报表分类','common/report/category/index.do')">
 	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
@@ -135,14 +135,22 @@
 	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
 	                            <span>报表制作</span>
 	                        </a>
-	               	    </div>		               	    	               	     	               	       	               	                        	
-	               	</div>               		
+	               	    </div>		               	    	               	    	               	     	               	       	               	                        	
+	               	</div> 
+	               	<div title="系统基本管理" style="overflow:auto;">
+	               	    <div class="nav-item">
+	                         <a href="javascript:_home.addTab('数据源','common/datasource/index.do')">
+	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>
+	                            <span>数据源</span>
+	                        </a>
+	               	    </div>		               	    	               	    	               	     	               	       	               	                        	
+	               	</div>   	               	              		
         	</div>  
 		</div>        
       	<div data-options="region:'center'" style="overflow:hidden;">
             <div class="easyui-tabs" id="systemtab" fit="true" border="false">
                 <div title="首页" style="padding:5px;overflow:hidden;text-align:center">
-                  <h1> 欢迎试用本系统!</h1>
+                  <h1> 欢迎使用smhdemo系统!</h1>
                 </div>
             </div>      	
       	</div>

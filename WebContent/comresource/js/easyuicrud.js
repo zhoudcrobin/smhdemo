@@ -432,7 +432,11 @@ function EwcmsOperate(){
 	    $.messager.confirm("提示","确定要删除所选记录吗?",function(r){
 	        if (r){
 	            $.post(deleteURL,ids,function(data){  
-	            	$.messager.alert('成功','删除成功','info');
+	            	if(data=="true"){
+	            		$.messager.alert('提示','删除成功','info');
+	            	}else{
+	            		$.messager.alert('提示','删除失败','info');
+	            	}
 	            	$(datagridID).datagrid('clearSelections');
 	                $(datagridID).datagrid('reload');              	
 	            });

@@ -19,6 +19,8 @@
 		$(function(){
 			ewcmsBOBJ = new EwcmsBase();
 			ewcmsBOBJ.setQueryURL('<c:url value="/common/report/chart/query.do"/>');
+			ewcmsBOBJ.setWinWidth(700);
+			ewcmsBOBJ.setWinHeight(400);
 			ewcmsBOBJ.addToolItem('参数设置', 'icon-article-preview', parameterSetOperate);
 			ewcmsBOBJ.addToolItem('预览', 'icon-article-preview', previewOperate);
 			ewcmsBOBJ.openDataGrid('#tt',{
@@ -50,9 +52,9 @@
 				$.messager.alert('提示', '只能选择一个预览', 'info');
 				return;
 			}
-			var url = '<s:url namespace="/report/show" action="paraset"/>?reportType=text&reportId='+ rows[0].id;
-			$('#parameterifr').attr('src',url);
-			ewcmsBOBJ.openWindow("#parameter-window",{width:400,height:213,title:"参数选择"});
+			var url = '<c:url value="/common/report/build/make.do"/>?reportType=chart&reportId='+ rows[0].id;
+			$('#editifr').attr('src',url);
+			ewcmsBOBJ.openWindow("#edit-window",{width:300,height:200});
 		}
 		
 		function parameterSetOperate(){
@@ -65,7 +67,7 @@
 				$.messager.alert('提示', '只能选择一条记录', 'info');
 				return;
 			}
-			var url = '<c:url value="/common/report/chart/parameter.do"/>?textId='+ rows[0].id;
+			var url = '<c:url value="/common/report/chart/parameter.do"/>?chartId='+ rows[0].id;
 			$('#editifr').attr('src',url);
 			ewcmsBOBJ.openWindow("#edit-window",{width:800,height:400,title:"参数设置"});
 		}

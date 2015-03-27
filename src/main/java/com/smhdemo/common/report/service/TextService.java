@@ -26,7 +26,6 @@ import com.smhdemo.common.report.dao.TextDao;
 import com.smhdemo.common.report.entity.Category;
 import com.smhdemo.common.report.entity.Parameter;
 import com.smhdemo.common.report.entity.Text;
-import com.smhdemo.common.report.util.ParameterSetValueUtil;
 import com.smhdemo.common.report.util.TextDesignUtil;
 /**
  * 
@@ -69,7 +68,7 @@ public class TextService implements TextServiceable {
 	public Long updText(Text vo) throws BaseException {
 		Text entity = textDao.get(vo.getId());
 		
-//		entity.setBaseDS(textReport.getBaseDS());
+		entity.setBaseDS(vo.getBaseDS());
 		entity.setName(vo.getName());
 		entity.setHidden(vo.getHidden());
 		entity.setRemark(vo.getRemark());
@@ -82,17 +81,13 @@ public class TextService implements TextServiceable {
 			TextDesignUtil rd = new TextDesignUtil(in);
 
 			List<JRParameter> paramList = rd.getParameters();
-			Set<Parameter> icSet = entity.getParameters();
-
-			Set<Parameter> icNewList = new LinkedHashSet<Parameter>();
+			Set<Parameter> oldParameters = entity.getParameters();
+			oldParameters.clear();
 			for (JRParameter param : paramList) {
-				Parameter ic = findListEntity(icSet, param);
-				if (ic == null) {
-					ic = getParameterValue(param);
-				}
-				icNewList.add(ic);
+				Parameter parameter = getParameterValue(param);
+				oldParameters.add(parameter);
 			}
-			entity.setParameters(icNewList);
+			entity.setParameters(oldParameters);
 		}
 		textDao.merge(entity);
 		return entity.getId();
@@ -100,20 +95,16 @@ public class TextService implements TextServiceable {
 	}
 
 	@Override
-	public void updTextParameter(Long textId, List<Parameter> parameters)
+	public void updTextParameter(List<Parameter> parameters)
 			throws BaseException {
-		Text entity = textDao.get(textId);
-		Set<Parameter> paramSet = new LinkedHashSet<Parameter>();
 		for(Parameter vo:parameters){
 			Parameter oldvo = parameterDao.get(vo.getId());
 			oldvo.setCnName(vo.getCnName());
 			oldvo.setDefaultValue(vo.getDefaultValue());
 			oldvo.setType(vo.getType());
 			oldvo.setValue(vo.getValue());
-			paramSet.add(oldvo);
+			parameterDao.merge(oldvo);
 		}
-		entity.setParameters(paramSet);
-		textDao.merge(entity);
 	}
 
 	@Override
@@ -155,26 +146,6 @@ public class TextService implements TextServiceable {
 		return textDao.findAll();
 	}
 
-	@Override
-	public Long updTextParameter(Long textId, Parameter parameter)
-			throws BaseException {
-		if (textId == null || textId.intValue() == 0)
-			throw new BaseException("", "报表编号不存在，请重新选择！");
-		Text text = textDao.get(textId);
-		if (text == null)
-			throw new BaseException("", "报表不存在，请重新选择！");
-		
-		parameter = ParameterSetValueUtil.setParametersValue(parameter);
-		
-		Set<Parameter> parameters = text.getParameters();
-		parameters.remove(parameter);
-		parameters.add(parameter);
-		text.setParameters(parameters);
-		
-		textDao.merge(text);
-		
-		return parameter.getId();
-	}
 	
 	/**
 	 * 把报表文件里的参数转换数据参数
@@ -197,26 +168,6 @@ public class TextService implements TextServiceable {
 		ic.setType(Conversion(jrParameter.getValueClassName()));
 
 		return ic;
-	}
-
-	/**
-	 * 根据报表参数名查询数据库中的报表参数集合
-	 * 
-	 * @param icSet
-	 *            数据库中的报表参数集合
-	 * @param JRParameter
-	 *            报表参数
-	 * @return ReportParameter
-	 */
-	private Parameter findListEntity(Set<Parameter> icSet, JRParameter param) {
-		for (Parameter ic : icSet) {
-			String rpEnName = ic.getEnName();
-			String jrEnName = param.getName();
-			if (jrEnName.trim().equals(rpEnName.trim())) {
-				return ic;
-			}
-		}
-		return null;
 	}
 
 	/**

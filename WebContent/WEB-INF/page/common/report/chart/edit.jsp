@@ -33,48 +33,28 @@
 					<td>
 						<f:input path="name" class="inputtext"/>
 					</td>
+					<td>图表标题：</td>
+					<td>
+						<f:input path="chartTitle" class="inputtext"/>
+					</td>					
 				</tr>
 				<tr>
 					<td>SQL表达式：</td>
-					<td>
-						<f:textarea path="chartSql" class="inputtext"/>
+					<td colspan=3>
+						<f:textarea path="chartSql"  cols="70" rows="4"/>
 					</td>
 				</tr>				
 				<tr>
 					<td>图表类型：</td>
 					<td>
-				        <f:select path="type">  
-	            			<f:option value="-1" label="--Please Select--"/>  
+				        <f:select path="type">   
 	            			<f:options items="${typeEnum}" itemValue="name" itemLabel="description"/>  
 	        			</f:select> 
-					</td>
-				</tr>
-				<tr>
-					<td>工具提示：</td>
+					<td>报表数据源：</td>
 					<td>
-						<f:checkbox  path="showTooltips"/>
-					</td>
-				</tr>
-				<tr>
-					<td>图表标题：</td>
-					<td>
-						<f:input path="chartTitle" class="inputtext"/>
-					</td>
-				</tr>
-				<tr>
-					<td>图表标题字体：</td>
-					<td>
-				        <f:select path="fontName">  
-	            			<f:option value="-1" label="--Please Select--"/>  
-	            			<f:options items="${fontNameMap}" />  
-	        			</f:select> 
-	        			<f:select path="fontStyle">  
-	            			<f:option value="-1" label="--Please Select--"/>  
-	            			<f:options items="${fontStyleMap}" />  
-	        			</f:select> 
-	        			<f:select path="fontSize">  
-	            			<f:option value="-1" label="--Please Select--"/>  
-	            			<f:options items="${fontSizeMap}" />  
+				        <f:select path="baseDS.id">  
+	            			<f:option value="-1" label="默认数据源"/>  
+	            			<f:options items="${baseDSList}" itemValue="id" itemLabel="name"/>  
 	        			</f:select> 
 					</td>
 				</tr>
@@ -83,26 +63,33 @@
 					<td>
 						<f:input path="horizAxisLabel" class="inputtext"/>
 					</td>
-				</tr>	
-				<tr>
 					<td>纵坐标轴标题：</td>
 					<td>
 						<f:input path="vertAxisLabel" class="inputtext"/>
-					</td>
-				</tr>
+					</td>					
+				</tr>	
 				<tr>
+					<td>图表标题字体：</td>
+					<td>
+				        <f:select path="fontName">  
+	            			<f:options items="${fontNameMap}" />  
+	        			</f:select> 
+	        			<f:select path="fontStyle">    
+	            			<f:options items="${fontStyleMap}" />  
+	        			</f:select> 
+	        			<f:select path="fontSize">   
+	            			<f:options items="${fontSizeMap}" />  
+	        			</f:select> 
+					</td>					
 					<td>数据字体：</td>
 					<td>
 				        <f:select path="dataFontName">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontNameMap}"/>  
 	        			</f:select> 
 	        			<f:select path="dataFontStyle">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontStyleMap}" />  
 	        			</f:select> 
 	        			<f:select path="dataFontSize">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontSizeMap}"/>  
 	        			</f:select> 
 					</td>
@@ -111,32 +98,24 @@
 					<td>坐标轴字体：</td>
 					<td>
 				        <f:select path="axisFontName">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontNameMap}"/>  
 	        			</f:select> 
 	        			<f:select path="axisFontStyle">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontStyleMap}" />  
 	        			</f:select> 
 	        			<f:select path="axisFontSize">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontSizeMap}" />  
 	        			</f:select> 
 					</td>
-				</tr>	
-				<tr>
 					<td>坐标轴尺值字体：</td>
 					<td>
 				        <f:select path="axisTickFontName">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontNameMap}" />  
 	        			</f:select> 
 	        			<f:select path="axisTickFontStyle">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontStyleMap}" />  
 	        			</f:select> 
 	        			<f:select path="axisTickFontSize">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontSizeMap}" />  
 	        			</f:select> 
 					</td>
@@ -145,12 +124,9 @@
 					<td>数据轴标签角度：</td>
 					<td>
 				        <f:select path="tickLabelRotate">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${rotateMap}" />  
 	        			</f:select> 
 					</td>
-				</tr>
-				<tr>
 					<td>图示说明：</td>
 					<td>
 						<f:checkbox  path="showLegend"/>
@@ -160,24 +136,18 @@
 					<td>图示位置：</td>
 					<td>
 				        <f:select path="legendPosition">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${positionMap}" />  
 	        			</f:select> 
 					</td>
-				</tr>	
-				<tr>
 					<td>图示字体：</td>
 					<td>
 				        <f:select path="legendFontName">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontNameMap}" />  
 	        			</f:select> 
 	        			<f:select path="legendFontStyle">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontStyleMap}" />  
 	        			</f:select> 
 	        			<f:select path="legendFontSize">  
-	            			<f:option value="-1" label="--Please Select--"/>  
 	            			<f:options items="${fontSizeMap}" />  
 	        			</f:select> 
 					</td>
@@ -187,19 +157,9 @@
 					<td>
 						<f:input path="chartHeight" class="inputtext"/>
 					</td>
-				</tr>
-				<tr>
 					<td>图表宽度：</td>
 					<td>
 						<f:input path="chartWidth" class="inputtext"/>
-					</td>
-				</tr>	
-				<tr>
-					<td>RGB背景色：</td>
-					<td>
-						<f:input path="bgColorR" class="inputtext"/>
-						<f:input path="bgColorG" class="inputtext"/>
-						<f:input path="bgColorB" class="inputtext"/>
 					</td>
 				</tr>	
 				<tr>
@@ -207,7 +167,25 @@
 					<td>
 						<f:input path="remark" class="inputtext"/>
 					</td>
-				</tr>																																								
+					<td>工具提示：</td>
+					<td>
+						<f:checkbox  path="showTooltips"/>
+					</td>					
+				</tr>	
+				<tr>
+					<td>RGB背景色：</td>
+					<td>
+						<f:input path="bgColorR" class="inputtext"  size="4"/>&nbsp;
+						<f:input path="bgColorG" class="inputtext"   size="4"/>&nbsp;
+						<f:input path="bgColorB" class="inputtext"   size="4"/>
+					</td>
+					<td>
+
+					</td>
+					<td>
+
+					</td>					
+				</tr>																																											
 			</table>
 			<f:hidden path="id"/>
 			<input type="hidden" name="addrecordlist" value="${addrecordlist}"/>

@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory;
 
 
 
-import com.smhdemo.common.report.BaseRuntimeException;
+
+import com.smhdemo.common.base.BaseRuntimeException;
 
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRXlsExporter;

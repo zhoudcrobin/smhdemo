@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>' title="default">
 	</head>
 	<body>
+		<c:if test="${empty actionResult}">
 		<f:form action="roleallocate.do" method="post" commandName="roleSelect">
 			<table cellPadding=1  cellSpacing=2  width=450>
 				<tr>
@@ -22,6 +23,9 @@
 			</table>
 			<input type="hidden" name="userID" value="${userID}"/>
 		</f:form>	
-
+		</c:if>
+		<c:if test="${not empty actionResult}">
+		<c:out value="${actionResult}"/>
+		</c:if>
 	</body>
 </html>

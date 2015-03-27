@@ -25,7 +25,7 @@ import com.smhdemo.common.report.entity.Text;
 public class TextDao extends JpaDao<Long, Text> {
 	
 	public List<Category> findCategoryReportByTextReportId(final Long textReportId){
-		String hql = "Select c From CategoryReport As c Left Join c.texts As t Where t.id=:textReportId";
+		String hql = "Select c From Category As c Left Join c.textReports As t Where t.id=:textReportId";
 		
 		TypedQuery<Category> query = this.getEntityManager().createQuery(hql, Category.class);
 		query.setParameter("textReportId", textReportId);

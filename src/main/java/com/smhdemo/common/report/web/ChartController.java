@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.smhdemo.common.datasource.DataSourceFac;
 import com.smhdemo.common.query.jpa.QueryParameter;
 import com.smhdemo.common.query.jpa.QueryParameter.QueryOperateType;
 import com.smhdemo.common.report.ReportFac;
 import com.smhdemo.common.report.entity.Chart;
+import com.smhdemo.common.report.entity.Parameter;
 import com.smhdemo.common.report.util.ChartUtil;
 import com.smhdemo.web.CrudBaseController;
 
@@ -28,6 +33,8 @@ import com.smhdemo.web.CrudBaseController;
 public class ChartController extends CrudBaseController<Chart,Long>{
 	@Autowired
 	private ReportFac reportFac;
+	@Autowired
+	private DataSourceFac dataSourceFac;
 	@Override
 	protected Chart getVO(Long pk, Model model) {
 		model.addAttribute("type", Chart.Type.values());
@@ -37,6 +44,7 @@ public class ChartController extends CrudBaseController<Chart,Long>{
 		model.addAttribute("rotateMap", ChartUtil.getRotateMap());
 		model.addAttribute("positionMap", ChartUtil.getPositionMap());
 		model.addAttribute("alignmentMap", ChartUtil.getAlignmentMap());
+		model.addAttribute("baseDSList", dataSourceFac.findAllBase());
 		if(pk != null){
 			try {
 				return reportFac.getChart(pk);
@@ -56,12 +64,18 @@ public class ChartController extends CrudBaseController<Chart,Long>{
 	@Override
 	protected Long addSaveOperator(Chart vo, BindingResult result, Model model)
 			throws Exception {
+		if(vo.getBaseDS().getId()==-1){
+			vo.setBaseDS(null);
+		}
 		return reportFac.addChart(vo);
 	}
 
 	@Override
 	protected Long updSaveOperator(Chart vo, BindingResult result, Model model)
 			throws Exception {
+		if(vo.getBaseDS().getId()==-1){
+			vo.setBaseDS(null);
+		}
 		return reportFac.updChart(vo);
 	}
 
@@ -101,6 +115,20 @@ public class ChartController extends CrudBaseController<Chart,Long>{
 	protected String getPagePath() {
 		return "common/report/chart";
 	}
-
+	@RequestMapping(value = "/parameter", method = RequestMethod.GET)
+	public String permissionAllocate(@RequestParam(value = "chartId", required = true) long chartId,Model model) {
+		model.addAttribute("parameterList", reportFac.getChart(chartId).getParameters());
+		model.addAttribute("typeEnum", Parameter.Type.values());
+		return getForwardPage("parameter");
+	}
+	
+	@RequestMapping(value = "/parameter", method = RequestMethod.POST)
+	public String permissionAllocate(@ModelAttribute ParameterList parameterList,Model model) {
+		try{
+			reportFac.updChartParameter(parameterList.getParameterList());
+			model.addAttribute("actionResult", "参数设置成功");
+		}catch(Exception e){model.addAttribute("actionResult", "参数设置失败");}
+		return getForwardPage("parameter");
+	}
 }
 

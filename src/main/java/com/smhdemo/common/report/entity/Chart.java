@@ -22,13 +22,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.smhdemo.common.datasource.entity.Base;
 
 /**
  * 图表
@@ -130,9 +133,9 @@ public class Chart implements Serializable {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type;
-//    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = BaseDS.class)
-//    @JoinColumn(name = "base_ds_id")
-//    private BaseDS baseDS;
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "base_ds_id")
+    private Base baseDS;
     @Column(name = "showTooltips")
     private Boolean showTooltips;
     @Column(name = "chartTitle")
@@ -194,8 +197,10 @@ public class Chart implements Serializable {
     @OrderBy("id")
     private Set<Parameter> parameters = new LinkedHashSet<Parameter>();
     @Temporal(TemporalType.TIMESTAMP)
+    @JSONField (format="yyyy-MM-dd")
     @Column(name = "createdate")
     private Date createDate;
+    @JSONField (format="yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updatedate")
     private Date updateDate;
@@ -244,15 +249,15 @@ public class Chart implements Serializable {
         this.type = chartType;
     }
 
-//    public BaseDS getBaseDS() {
-//        return baseDS;
-//    }
-//
-//    public void setBaseDS(BaseDS baseDS) {
-//        this.baseDS = baseDS;
-//    }
+    public Base getBaseDS() {
+		return baseDS;
+	}
 
-    public Boolean getShowTooltips() {
+	public void setBaseDS(Base baseDS) {
+		this.baseDS = baseDS;
+	}
+
+	public Boolean getShowTooltips() {
         return showTooltips == null ? false : showTooltips;
     }
 

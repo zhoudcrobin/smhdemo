@@ -42,7 +42,7 @@ public interface TextServiceable {
 	 * @return Long 文字报表编号
 	 * @throws BaseException
 	 */
-	public void updTextParameter(Long textId,List<Parameter> parameters) throws BaseException;
+	public void updTextParameter(List<Parameter> parameters) throws BaseException;
 	/**
 	 * 删除报表
 	 * 
@@ -64,13 +64,4 @@ public interface TextServiceable {
 	 * @return List 文字报表集合
 	 */
 	public List<Text> findAllText() ;
-	
-	/**
-	 * 更新报表参数
-	 * 
-	 * @param textReportId 报表编号
-	 * @param pagesList 页面参数集合
-	 * @throws BaseException
-	 */
-	public Long updTextParameter(Long textId,Parameter parameter) throws BaseException;
 }
