@@ -2,6 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+
 <html>
 	<head>
 		<title>报表参数输入</title>
@@ -9,6 +10,7 @@
 		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/easyui/themes/default/easyui.css"/>' title="default">
 		<link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/pagebase.css"/>' title="default">
+		<script type="text/javascript" src='<c:url value="/comresource/date/WdatePicker.js"/>'></script>
 		<script type="text/javascript">
 			function checkBoxValue(name){
 				var strValue = '';
@@ -80,7 +82,7 @@
 									</c:forEach>
 								</c:if>
 							 	 <c:if test="${parameter.type.name=='DATE'}">
-									<input type="text" name="paraMap['${parameter.enName}']">
+									<input type="text" name="paraMap['${parameter.enName}']" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})">
 								</c:if>	
 							 	 <c:if test="${parameter.type.name=='SESSION'}">
 									<input type="text" name="paraMap['${parameter.enName}']" value="<shiro:principal/>">
@@ -108,5 +110,11 @@
 			<input type="hidden" name="reportType" value="${reportType}"/>
 			<input type="hidden" name="reportId" value="${reportId}"/>
 		</f:form>
+			<c:if test="${reportType=='chart' && empty parameters}">
+			<script type="text/javascript">
+			document.forms[0].submit();
+			parent.closeWindow('#parameter-window');
+			</script>
+			</c:if>	
 	</body>
 </html>
