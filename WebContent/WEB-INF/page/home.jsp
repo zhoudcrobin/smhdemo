@@ -83,7 +83,7 @@
 		</div>
 		<div data-options="region:'west',split:true,title:'功能菜单列表'" style="width:180px;padding:1px;overflow:hidden;">
 			<div  class="easyui-accordion"  fit=true border="false">
-				<shiro:hasRole name="adminmanager">
+				<shiro:hasRole name="role_admin">
 	               	<div title="权限管理" style="overflow:auto;">
 	               	    <div class="nav-item">
 	                         <a href="javascript:_home.addTab('系统用户','common/security/user/index.do')">
@@ -137,7 +137,7 @@
 	                        </a>
 	               	    </div>		               	    	               	    	               	     	               	       	               	                        	
 	               	</div> 
-	               	<div title="系统基本管理" style="overflow:auto;">
+	               	<div title="系统设置管理" style="overflow:auto;">
 	               	    <div class="nav-item">
 	                         <a href="javascript:_home.addTab('数据源','common/datasource/index.do')">
 	                            <img src='<c:url value="comresource/image/user.png"/>' style="border:0"/><br/>

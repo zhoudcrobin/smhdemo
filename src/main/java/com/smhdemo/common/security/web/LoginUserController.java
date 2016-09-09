@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.smhdemo.common.security.SecurityFac;
 import com.smhdemo.common.security.entity.User;
 import com.smhdemo.common.security.entity.UserInfo;
+import com.smhdemo.common.util.Md5Utils;
 import com.smhdemo.web.BaseController;
 
 /**
@@ -83,7 +84,7 @@ public class LoginUserController extends BaseController{
 		String loginName = (String)SecurityUtils.getSubject().getPrincipal();
 		try{
 			User user = securityFac.getUser(loginName);
-			if(oldPassword.equals(user.getPassword())){
+			if(Md5Utils.checkMd5Password(loginName, oldPassword, user.getSalt(), user.getPassword())){
 				if(newPassword.equals(againPassword)){
 					user.setPassword(newPassword);
 					securityFac.updUser(user);

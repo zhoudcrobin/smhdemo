@@ -11,6 +11,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.smhdemo.common.security.entity.Role;
 import com.smhdemo.common.security.entity.User;
 import com.smhdemo.common.security.service.UserServiceable;
+import com.smhdemo.common.util.Md5Utils;
 
 /**
  * 
@@ -65,9 +67,14 @@ public class MyRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 		try {
 			User user = userService.getUser(token.getUsername());
+			String password = new String(token.getPassword());
+
 			if (user != null) {
-				return new SimpleAuthenticationInfo(user.getAccountName(),
-						user.getPassword(), getName());
+				if (Md5Utils.checkMd5Password(user.getAccountName(), password,
+						user.getSalt(), user.getPassword())) {
+					return new SimpleAuthenticationInfo(user.getAccountName(),
+							password.toCharArray(), getName());
+				}
 			}
 		} catch (Exception e) {
 			logger.debug(e.toString());

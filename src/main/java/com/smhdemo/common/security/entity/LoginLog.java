@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import com.alibaba.fastjson.annotation.JSONField;
 
 @Entity
-@Table(name="shiro_loginllog")
+@Table(name="shiro_loginlog")
 @SequenceGenerator(name = "seq_shiro_loginlog", sequenceName = "seq_shiro_loginlog_id", allocationSize = 1)
 public class LoginLog implements Serializable {
 	private static final long serialVersionUID = 1578530886376782729L;

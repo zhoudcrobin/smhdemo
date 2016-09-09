@@ -11,7 +11,32 @@
 <html>
     <head>
         <title>sshdemo--用户登录</title>
+        <script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.min.js"/>'></script>
+		<script type="text/javascript" src='<c:url value="/comresource/easyui/jquery.easyui.min.js"/>'></script>
         <link rel="stylesheet" type="text/css" href='<c:url value="/comresource/css/login.css"/>'></link>
+        <script type="text/javascript">
+		$(function() {
+		    $('#id_checkcode').click(function() {
+		        this.src = '<c:url value="/captcha-image.do"/>' + '?nocache=' + Math.random();
+		        $('input[name=checkCode]').val("").focus();
+		    });
+		    $('input[name=checkCode]').keypress(function(event) {
+		        if (event.which == '13') {
+		        	document.forms[0].submit();
+		        }
+		    });
+		    $('input[name=accountName]').keypress(function(event) {
+		        if (event.which == '13') {
+		            $('input[name=password]').focus();
+		        }
+		    });
+		    $('input[name=password]').keypress(function(event) {
+		        if (event.which == '13') {
+		            $('input[name=checkCode]').focus();
+		        }
+		    });
+    	});
+</script>
     </head>
     <body id="userlogin_body">
    	<div></div>
@@ -41,8 +66,9 @@
 			    				<ul>
 			      					<li class="user_main_text">验证码：</li>
 			      					<li class="user_main_input">
-                            			<input class="txtvalidatecodecssclass" type="text" name="checkcode"/>
+                            			<input class="txtvalidatecodecssclass" type="text" name="checkCode"/>
 			        				</li>
+			        				<li><img id="id_checkcode"  src='captcha-image.do' alt="checkcode.jpg" title="看不清,换一张" style="padding-left: 5px;margin-bottom: 3px" /></li>
 			        			</ul>
 			    				<ul>
 			      					<li class="user_main_text">记&nbsp;&nbsp;&nbsp;&nbsp;住：</li>

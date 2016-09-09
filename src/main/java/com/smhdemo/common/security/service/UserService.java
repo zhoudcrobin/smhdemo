@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.smhdemo.common.base.BaseException;
 import com.smhdemo.common.security.dao.UserDao;
 import com.smhdemo.common.security.entity.User;
+import com.smhdemo.common.util.Md5Utils;
 /**
  * 
  *  
@@ -18,12 +19,18 @@ public class UserService implements UserServiceable {
 	
 	@Override
 	public Integer addUser(User user) throws BaseException {
+		User md5User = Md5Utils.md5Password(user.getAccountName(), user.getPassword());
+		user.setPassword(md5User.getPassword());
+		user.setSalt(md5User.getSalt());
 		userDao.persist(user);
 		return user.getId();
 	}
 
 	@Override
 	public Integer updUser(User user) throws BaseException {
+		User md5User = Md5Utils.md5Password(user.getAccountName(), user.getPassword());
+		user.setPassword(md5User.getPassword());
+		user.setSalt(md5User.getSalt());
 		userDao.merge(user);
 		return user.getId();
 	}

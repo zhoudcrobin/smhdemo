@@ -5,7 +5,6 @@ xmlns:context="http://www.springframework.org/schema/context"
 xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="myRealm"/>
 		<property name="cacheManager" ref="cacheManager"/>
@@ -20,12 +19,14 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<value>
 		<!--静态资源直接通过-->
 		/comresource/** =anon
+		/common/android/** =anon
+		/captcha-image.do =anon
 		<!--只有admin角色才能访问/user/save-->
-		/common/security/user/** =roles[adminmanager]
-		/common/security/role/** =roles[adminmanager]
-		/common/security/permission/** =roles[adminmanager]
+		<!--/common/security/user/** =roles[role_admin]-->
+		/common/security/role/** =roles[role_admin]
+		/common/security/permission/** =roles[role_admin]
 		<!--具有user:add权限的用户可以访问/user/save-->
-		<!--/user/save =perms[user:add]-->
+		/common/security/user/save.do =perms[user:add]
 		<!--所有的请求都要通过验证-->
 		/** = authc
 		</value>

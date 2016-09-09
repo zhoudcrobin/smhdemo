@@ -45,9 +45,10 @@ public class User implements Serializable {
     
     @Column(name="accountname",length=32)
     @NotBlank
-    @Pattern(regexp = "[a-zA-Z0-9]{6,20}", message = "账户名是由数字字母组成的6到20位的字符串") 
+    @Pattern(regexp = "[a-zA-Z0-9]{5,20}", message = "账户名是由数字字母组成的5到20位的字符串") 
     private String accountName;
-    
+    @Column(name="salt",length=100)
+    private String salt;
     private String password;
     private Boolean enabled = true;
     @OneToOne(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
@@ -103,6 +104,14 @@ public class User implements Serializable {
 		this.roleList = roleList;
 	}
 	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	@Transient
 	public Set<String> getRolesName(){
 		List<Role> roles=getRoleList();
